@@ -1,0 +1,23 @@
+
+
+
+    /// Mints LP tokens for staking rewards
+    access(contract) let LPTokenMinter: @LPToken.Minter
+
+
+    /// Paths for storing  resources
+    pub let PoolPath: Path
+
+
+
+    ///NodeStaker  resource storing functions to mangae the tokens staked for a node in the central contract
+    ///NodeStaker->stakeNewTokens    deposits tokens to the contract for safety 
+
+    tokensCommitted
+
+
+
+~~~~~~~~~~~~  QUESTIONS
+1. Pairs, should thay remain contracts or be resources maybe? 
+A: We need different contracts in order to mint different LP_Tokens
+2: Can we create account and deploy contract there from a contract?
