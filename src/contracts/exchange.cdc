@@ -2,20 +2,23 @@ import FungibleToken from x0FUNGIBLETOKENADDRESS
 import FlowToken from x0FLOWTOKENADDRESS
 import BitrootToken from x0BITROOTTOKENADDRESS
 
-pub contract interface MonoswapFTPairI {}
+pub contract interface MonoswapFTPairI {
+
+}
 
 pub contract MonoswapFTPair: MonoswapFTPairI, FungibleToken {
 
-    pub let MINIMUM_LIQUIDITY: UInt64 = 10**3;
+    pub let MINIMUM_LIQUIDITY: UFix64;
     //pub let factory Address;
-    pub let token0 address;  //FLOW
-    pub let token1 address;  //BITROOT  
+    pub let token0: address;  //FLOW
+    pub let token1: address;  //BITROOT  
 
     access(contract) var reserve0: @FungibleToken.Vault;   //  balance accessible via getReserves         
     access(contract) var reserve1: @FungibleToken.Vault;  //  balance accessible via getReserves       
     access(contract) var blockTimestampLast: UInt256;   //  accessible via getReserves
 
     access(contract) let minter: @Minter;
+    pub var totalSupply: UFix64;
  
     /* ORACLE provisions
 
@@ -73,28 +76,78 @@ pub contract MonoswapFTPair: MonoswapFTPairI, FungibleToken {
         self.token1  <- Bitroot.createEmptyVault();
         self.blockTimestampLast = UInt256(0);
 
+        self.totalSupply = 0.0;
+        self.MINIMUM_LIQUIDITY = 1000;
         self.minter <- create Minter();
 
     }
 
+    // FT stuff
 
-    // update reserves and, on the first call per block, price accumulators
-    function _update(uint balance0, uint balance1, uint112 _reserve0, uint112 _reserve1) private {
-        require(balance0 <= uint112(-1) && balance1 <= uint112(-1), 'UniswapV2: OVERFLOW');
-        uint32 blockTimestamp = uint32(block.timestamp % 2**32);
-        uint32 timeElapsed = blockTimestamp - blockTimestampLast; // overflow is desired
-        if (timeElapsed > 0 && _reserve0 != 0 && _reserve1 != 0) {
-            // * never overflows, and + overflow is desired
-            price0CumulativeLast += uint(UQ112x112.encode(_reserve1).uqdiv(_reserve0)) * timeElapsed;
-            price1CumulativeLast += uint(UQ112x112.encode(_reserve0).uqdiv(_reserve1)) * timeElapsed;
+    pub resource Minter {
+
+        pub fun mintTokens(amount: UFix64): @MonoswapFTPair.Vault {
+            pre {
+                amount > UFix64(0): "Amount minted must be greater than zero"
+            }
+            MonoswapFTPair.totalSupply = MonoswapFTPair.totalSupply + amount 
+            //emit TokensMinted(amount: amount)
+            return <-create Vault(balance: amount)
         }
-        reserve0 = uint112(balance0);
-        reserve1 = uint112(balance1);
-        blockTimestampLast = blockTimestamp;
-        emit Sync(reserve0, reserve1);
-    }
 
-    // WE DON'T NEED FEES at this oint
+        pub fun burnTokens(from: @FungibleToken.Vault) {
+            let vault <- from as! @MonoswapFTPair.Vault
+            let amount = vault.balance
+            destroy vault
+            emit TokensBurned(amount: amount)
+        }
+    }
+    
+        
+    pub resource Vault: FungibleToken.Provider, FungibleToken.Receiver, FungibleToken.Balance {
+        pub var balance: UFix64;
+
+        init(balance: UFix64) {
+            self.balance = balance
+        }
+    
+
+      pub fun withdraw(amount: UFix64): @FungibleToken.Vault {
+            self.balance = self.balance - amount
+            emit TokensWithdrawn(amount: amount, from: self.owner?.address)
+            return <-create Vault(balance: amount)
+        }
+        pub fun deposit(from: @FungibleToken.Vault) {
+            let vault <- from as! @FlowToken.Vault
+            self.balance = self.balance + vault.balance
+            emit TokensDeposited(amount: vault.balance, to: self.owner?.address)
+            vault.balance = 0.0
+            destroy vault
+        }
+
+        destroy() {
+            MonoswapFTPair.totalSupply = MonoswapFTPair.totalSupply - self.balance
+        }
+    }
+    // ORACLE STUFF, 
+    // ALSO, we don't need tou update reserve values as we have them localy in the vaults
+    // update reserves and, on the first call per block, price accumulators
+    //function _update(uint balance0, uint balance1, uint112 _reserve0, uint112 _reserve1) private {
+    //    require(balance0 <= uint112(-1) && balance1 <= uint112(-1), 'UniswapV2: OVERFLOW');
+    //    uint32 blockTimestamp = uint32(block.timestamp % 2**32);
+    //    uint32 timeElapsed = blockTimestamp - blockTimestampLast; // overflow is desired
+    //    if (timeElapsed > 0 && _reserve0 != 0 && _reserve1 != 0) {
+            // * never overflows, and + overflow is desired
+    //        price0CumulativeLast += uint(UQ112x112.encode(_reserve1).uqdiv(_reserve0)) * timeElapsed;
+    //        price1CumulativeLast += uint(UQ112x112.encode(_reserve0).uqdiv(_reserve1)) * timeElapsed;
+    //    }
+    //    reserve0 = uint112(balance0);
+    //    reserve1 = uint112(balance1);
+    //    blockTimestampLast = blockTimestamp;
+    //    emit Sync(reserve0, reserve1);
+    // }
+
+    // WE DON'T NEED FEES at this point
     // if fee is on, mint liquidity equivalent to 1/6th of the growth in sqrt(k)
     //function _mintFee(uint112 _reserve0, uint112 _reserve1) private returns (bool feeOn) {
     //    address feeTo = IUniswapV2Factory(factory).feeTo();
@@ -117,53 +170,57 @@ pub contract MonoswapFTPair: MonoswapFTPairI, FungibleToken {
     //}
 
     // this low-level function should be called from a contract which performs important safety checks
-    function mint(address to) external lock returns (uint liquidity) {
-        (uint112 _reserve0, uint112 _reserve1,) = getReserves(); // gas savings
-        uint balance0 = IERC20(token0).balanceOf(address(this));
-        uint balance1 = IERC20(token1).balanceOf(address(this));
-        uint amount0 = balance0.sub(_reserve0);
-        uint amount1 = balance1.sub(_reserve1);
-
-        bool feeOn = _mintFee(_reserve0, _reserve1);
-        uint _totalSupply = totalSupply; // gas savings, must be defined here since totalSupply can update in _mintFee
-        if (_totalSupply == 0) {
-            liquidity = Math.sqrt(amount0.mul(amount1)).sub(MINIMUM_LIQUIDITY);
-           _mint(address(0), MINIMUM_LIQUIDITY); // permanently lock the first MINIMUM_LIQUIDITY tokens
-        } else {
-            liquidity = Math.min(amount0.mul(_totalSupply) / _reserve0, amount1.mul(_totalSupply) / _reserve1);
-        }
-        require(liquidity > 0, 'UniswapV2: INSUFFICIENT_LIQUIDITY_MINTED');
-        _mint(to, liquidity);
-
-        _update(balance0, balance1, _reserve0, _reserve1);
-        if (feeOn) kLast = uint(reserve0).mul(reserve1); // reserve0 and reserve1 are up-to-date
-        emit Mint(msg.sender, amount0, amount1);
-    }
+    /*MINT AFAIU is supposed to be called int the same transaction liquidity has been added  
+    we shold have this functionality integrated in fun addLiquidity as all happens within the contract (account) */
+    //function mint(address to) external lock returns (uint liquidity) {
+    //   (uint112 _reserve0, uint112 _reserve1,) = getReserves(); // gas savings
+    //    uint balance0 = IERC20(token0).balanceOf(address(this));
+    //    uint balance1 = IERC20(token1).balanceOf(address(this));
+    //    uint amount0 = balance0.sub(_reserve0);
+    //    uint amount1 = balance1.sub(_reserve1);
+    //
+    //    bool feeOn = _mintFee(_reserve0, _reserve1);
+    //    uint _totalSupply = totalSupply; // gas savings, must be defined here since totalSupply can update in _mintFee
+    //    if (_totalSupply == 0) {
+    //        liquidity = Math.sqrt(amount0.mul(amount1)).sub(MINIMUM_LIQUIDITY);
+    //       _mint(address(0), MINIMUM_LIQUIDITY); // permanently lock the first MINIMUM_LIQUIDITY tokens
+    //    } else {
+    //        liquidity = Math.min(amount0.mul(_totalSupply) / _reserve0, amount1.mul(_totalSupply) / _reserve1);
+    //    }
+    //    require(liquidity > 0, 'UniswapV2: INSUFFICIENT_LIQUIDITY_MINTED');
+    //    _mint(to, liquidity);
+    //
+    //    _update(balance0, balance1, _reserve0, _reserve1);
+    //    if (feeOn) kLast = uint(reserve0).mul(reserve1); // reserve0 and reserve1 are up-to-date
+    //    emit Mint(msg.sender, amount0, amount1);
+    //}
 
     // this low-level function should be called from a contract which performs important safety checks
-    function burn(address to) external lock returns (uint amount0, uint amount1) {
-        (uint112 _reserve0, uint112 _reserve1,) = getReserves(); // gas savings
-        address _token0 = token0;                                // gas savings
-        address _token1 = token1;                                // gas savings
-        uint balance0 = IERC20(_token0).balanceOf(address(this));
-        uint balance1 = IERC20(_token1).balanceOf(address(this));
-        uint liquidity = balanceOf[address(this)];
-
-        bool feeOn = _mintFee(_reserve0, _reserve1);
-        uint _totalSupply = totalSupply; // gas savings, must be defined here since totalSupply can update in _mintFee
-        amount0 = liquidity.mul(balance0) / _totalSupply; // using balances ensures pro-rata distribution
-        amount1 = liquidity.mul(balance1) / _totalSupply; // using balances ensures pro-rata distribution
-        require(amount0 > 0 && amount1 > 0, 'UniswapV2: INSUFFICIENT_LIQUIDITY_BURNED');
-        _burn(address(this), liquidity);
-        _safeTransfer(_token0, to, amount0);
-        _safeTransfer(_token1, to, amount1);
-        balance0 = IERC20(_token0).balanceOf(address(this));
-        balance1 = IERC20(_token1).balanceOf(address(this));
-
-        _update(balance0, balance1, _reserve0, _reserve1);
-        if (feeOn) kLast = uint(reserve0).mul(reserve1); // reserve0 and reserve1 are up-to-date
-        emit Burn(msg.sender, amount0, amount1, to);
-    }
+     /*BURN AFAIU is supposed to be called int the same transaction liquidity has been added  
+    we shold have this functionality integrated in fun addLiquidity as all happens within the contract (account) */
+    //function burn(address to) external lock returns (uint amount0, uint amount1) {
+    //    (uint112 _reserve0, uint112 _reserve1,) = getReserves(); // gas savings
+    //    address _token0 = token0;                                // gas savings
+    //    address _token1 = token1;                                // gas savings
+    //    uint balance0 = IERC20(_token0).balanceOf(address(this));
+    //    uint balance1 = IERC20(_token1).balanceOf(address(this));
+    //    uint liquidity = balanceOf[address(this)];
+    //
+    //    bool feeOn = _mintFee(_reserve0, _reserve1);
+    //    uint _totalSupply = totalSupply; // gas savings, must be defined here since totalSupply can update in _mintFee
+    //    amount0 = liquidity.mul(balance0) / _totalSupply; // using balances ensures pro-rata distribution
+    //    amount1 = liquidity.mul(balance1) / _totalSupply; // using balances ensures pro-rata distribution
+    //    require(amount0 > 0 && amount1 > 0, 'UniswapV2: INSUFFICIENT_LIQUIDITY_BURNED');
+    //    _burn(address(this), liquidity);
+    //    _safeTransfer(_token0, to, amount0);
+    //    _safeTransfer(_token1, to, amount1);
+    //    balance0 = IERC20(_token0).balanceOf(address(this));
+    //    balance1 = IERC20(_token1).balanceOf(address(this));
+    //
+    //    _update(balance0, balance1, _reserve0, _reserve1);
+    //    if (feeOn) kLast = uint(reserve0).mul(reserve1); // reserve0 and reserve1 are up-to-date
+    //    emit Burn(msg.sender, amount0, amount1, to);
+    //}
 
     // this low-level function should be called from a contract which performs important safety checks
     function swap(uint amount0Out, uint amount1Out, address to, bytes calldata data) external lock {
