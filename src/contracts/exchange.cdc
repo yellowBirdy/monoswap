@@ -197,7 +197,7 @@ pub contract MonoswapFTPair: MonoswapFTPairI, FungibleToken {
 
     // this low-level function should be called from a contract which performs important safety checks
      /*BURN AFAIU is supposed to be called int the same transaction liquidity has been added  
-    we shold have this functionality integrated in fun addLiquidity as all happens within the contract (account) */
+    we shold have this functionality integrated in fun withdrawLiquidity as all happens within the contract (account) */
     //function burn(address to) external lock returns (uint amount0, uint amount1) {
     //    (uint112 _reserve0, uint112 _reserve1,) = getReserves(); // gas savings
     //    address _token0 = token0;                                // gas savings
@@ -221,6 +221,18 @@ pub contract MonoswapFTPair: MonoswapFTPairI, FungibleToken {
     //    if (feeOn) kLast = uint(reserve0).mul(reserve1); // reserve0 and reserve1 are up-to-date
     //    emit Burn(msg.sender, amount0, amount1, to);
     //}
+    pub fun addLiquidity() {
+
+    }
+    pub fun withdrawLiquidity() {
+
+    }
+    pub fun getPrice() {
+
+    }
+    pub fun swap() {
+
+    }
 
     // this low-level function should be called from a contract which performs important safety checks
     function swap(uint amount0Out, uint amount1Out, address to, bytes calldata data) external lock {
@@ -252,17 +264,17 @@ pub contract MonoswapFTPair: MonoswapFTPairI, FungibleToken {
         _update(balance0, balance1, _reserve0, _reserve1);
         emit Swap(msg.sender, amount0In, amount1In, amount0Out, amount1Out, to);
     }
-
+    /* IRRELEVANT IMO */
     // force balances to match reserves
-    function skim(address to) external lock {
-        address _token0 = token0; // gas savings
-        address _token1 = token1; // gas savings
-        _safeTransfer(_token0, to, IERC20(_token0).balanceOf(address(this)).sub(reserve0));
-        _safeTransfer(_token1, to, IERC20(_token1).balanceOf(address(this)).sub(reserve1));
-    }
+    //function skim(address to) external lock {
+    //    address _token0 = token0; // gas savings
+    //    address _token1 = token1; // gas savings
+    //    _safeTransfer(_token0, to, IERC20(_token0).balanceOf(address(this)).sub(reserve0));
+    //    _safeTransfer(_token1, to, IERC20(_token1).balanceOf(address(this)).sub(reserve1));
+    //}
 
     // force reserves to match balances
-    function sync() external lock {
-        _update(IERC20(token0).balanceOf(address(this)), IERC20(token1).balanceOf(address(this)), reserve0, reserve1);
-    }
+    //function sync() external lock {
+    //    _update(IERC20(token0).balanceOf(address(this)), IERC20(token1).balanceOf(address(this)), reserve0, reserve1);
+    //}
 }
