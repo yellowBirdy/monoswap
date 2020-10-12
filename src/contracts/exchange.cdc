@@ -17,6 +17,8 @@ pub contract MonoswapFTPair: MonoswapFTPairI, FungibleToken {
     access(contract) var reserve1: @FungibleToken.Vault;  //  balance accessible via getReserves       
     access(contract) var blockTimestampLast: UInt256;   //  accessible via getReserves
 
+    pub var fee: UInt64;
+
     access(contract) let minter: @Minter;
     pub var totalSupply: UFix64;
  
@@ -75,6 +77,8 @@ pub contract MonoswapFTPair: MonoswapFTPairI, FungibleToken {
         self.token0 <- FlowToken.createEmptyVault();
         self.token1  <- Bitroot.createEmptyVault();
         self.blockTimestampLast = UInt256(0);
+
+        self.fee = UInt64(0);
 
         self.totalSupply = 0.0;
         self.MINIMUM_LIQUIDITY = 1000;
@@ -227,9 +231,39 @@ pub contract MonoswapFTPair: MonoswapFTPairI, FungibleToken {
     pub fun withdrawLiquidity() {
 
     }
-    pub fun getPrice() {
 
+    access(contract) fun mint() {
+
+    }   
+    pub fun quote(
+        input_amount: UFix64,
+        input_reserve:UFix64,
+        output_reserve:UFix64
+    ): UFix64 {
+        return input_amount  *  (output_reserve / input_reserve) 
     }
+    pub fun getAmountOut(        
+        input_amount: UFix64,
+        input_reserve:UFix64,
+        output_reserve:UFix64
+    ): UFix64 {
+        //require(amountIn > 0, 'UniswapV2Library: INSUFFICIENT_INPUT_AMOUNT');
+        //require(reserveIn > 0 && reserveOut > 0, 'UniswapV2Library: INSUFFICIENT_LIQUIDITY');
+        let input_amount_minus_fee = input_amount * (1 - self.fee)
+        let numerator = input_amount_minus_fee * output_reserve; 
+        let denominator = input_reserve + input_amount_minus_fee
+        return numerator / denominator;
+    }
+
+        // given an output amount of an asset and pair reserves, returns a required input amount of the other asset
+    //function getAmountIn(uint amountOut, uint reserveIn, uint reserveOut) internal pure returns (uint amountIn) {
+    //    require(amountOut > 0, 'UniswapV2Library: INSUFFICIENT_OUTPUT_AMOUNT');
+    //    require(reserveIn > 0 && reserveOut > 0, 'UniswapV2Library: INSUFFICIENT_LIQUIDITY');
+    //    uint numerator = reserveIn.mul(amountOut).mul(1000);
+    //    uint denominator = reserveOut.sub(amountOut).mul(997);
+    //    amountIn = (numerator / denominator).add(1);
+    //}
+    
     pub fun swap() {
 
     }
