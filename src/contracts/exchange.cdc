@@ -250,9 +250,20 @@ pub contract MonoswapFTPair: MonoswapFTPairI, FungibleToken {
         //require(amountIn > 0, 'UniswapV2Library: INSUFFICIENT_INPUT_AMOUNT');
         //require(reserveIn > 0 && reserveOut > 0, 'UniswapV2Library: INSUFFICIENT_LIQUIDITY');
         let input_amount_minus_fee = input_amount * (1 - self.fee)
-        let numerator = input_amount_minus_fee * output_reserve; 
-        let denominator = input_reserve + input_amount_minus_fee
-        return numerator / denominator;
+        let price = (input_reserve + input_amount_minus_fee) / output_reserve 
+        return input_amount_minus_fee / price ;
+    }
+
+    pub fun getAmountIn(        
+        output_amount: UFix64,
+        input_reserve:UFix64,
+        output_reserve:UFix64
+    ): UFix64 {
+        //require(amountIn > 0, 'UniswapV2Library: INSUFFICIENT_INPUT_AMOUNT');
+        //require(reserveIn > 0 && reserveOut > 0, 'UniswapV2Library: INSUFFICIENT_LIQUIDITY');
+        let input_amount_with_fee_multiplier = 1 / (1 - self.fee);
+        let price = (output_reserve - output_amount) / input_reserve; 
+        return (output_amount / price) * input_amount_with_fee_multiplier;
     }
 
         // given an output amount of an asset and pair reserves, returns a required input amount of the other asset
