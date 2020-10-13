@@ -17,7 +17,7 @@ pub contract MonoswapFTPair: MonoswapFTPairI, FungibleToken {
     access(contract) var reserve1: @FungibleToken.Vault;  //  balance accessible via getReserves       
     access(contract) var blockTimestampLast: UInt256;   //  accessible via getReserves
 
-    pub var fee: UInt64;
+    pub var fee: UFix64;
 
     access(contract) let minter: @Minter;
     pub var totalSupply: UFix64;
@@ -249,7 +249,7 @@ pub contract MonoswapFTPair: MonoswapFTPairI, FungibleToken {
     ): UFix64 {
         //require(amountIn > 0, 'UniswapV2Library: INSUFFICIENT_INPUT_AMOUNT');
         //require(reserveIn > 0 && reserveOut > 0, 'UniswapV2Library: INSUFFICIENT_LIQUIDITY');
-        let input_amount_minus_fee = input_amount * (1 - self.fee)
+        let input_amount_minus_fee = input_amount * (1.0 - self.fee)
         let price = (input_reserve + input_amount_minus_fee) / output_reserve 
         return input_amount_minus_fee / price ;
     }
@@ -261,7 +261,7 @@ pub contract MonoswapFTPair: MonoswapFTPairI, FungibleToken {
     ): UFix64 {
         //require(amountIn > 0, 'UniswapV2Library: INSUFFICIENT_INPUT_AMOUNT');
         //require(reserveIn > 0 && reserveOut > 0, 'UniswapV2Library: INSUFFICIENT_LIQUIDITY');
-        let input_amount_with_fee_multiplier = 1 / (1 - self.fee);
+        let input_amount_with_fee_multiplier = 1.0 / (1.0 - self.fee);
         let price = (output_reserve - output_amount) / input_reserve; 
         return (output_amount / price) * input_amount_with_fee_multiplier;
     }
@@ -276,28 +276,52 @@ pub contract MonoswapFTPair: MonoswapFTPairI, FungibleToken {
     //}
     
     pub fun swapFlowToBitroot(xTokens: @FlowToken.Vault, to: &{BitrootToken.Receiver}, minAmountOut: UFix64) {
-        /*
-            1.  - check xTokens not empty
-            2. getAmountOut
-            3. assert amoutOut >= minAmountOut
-            4. withdraw amountOut
-            (5a). deposit xTokens protocol fee if present
-            5. deposit xToken to self.reserve0
-            6. deposit amountOut to to
-            7. emit event
-         */
+        // 1.  - check xTokens not empty
+        pre {
+            xTokens.balance > UFix64(0): "Amount sent must be greater than zero"
+        }
+        // 2. getAmountOut
+        let amountOut = self.getAmountOut(
+            input_amount: xTokens.balance, 
+            input_reserve: self.reserve0.balance, 
+            output_reserve: self.reserve1.balance
+        )
+        // 3. assert amoutOut >= minAmountOut
+        assert(amountOut >= minAmountOut, message: "Rat too bad")
+        // 4. withdraw amountOut
+        let yTokens = <-self.reserve1.withdraw(amount: amountOut)
+        //(5a). deposit xTokens protocol fee if present
+        // protocol fee
+        // 5. deposit xToken to self.reserve0
+        self.reserve0.deposit(<- xTokens)
+        // 6. deposit amountOut to to
+        to.deposit(<- yTokens)
+        // 7. emit event
+        //emit swap()
     }
-    pub fun swapBitrootToFlow(xTokens: @BitrootToken.Vault, to: &{FlowToken.Receiver}, minAmountOut: UFix64) {
-        /*
-            1.  - check xTokens not empty
-            2. getAmountOut
-            3. assert amoutOut >= minAmountOut
-            4. withdraw amountOut
-            (5a). deposit xTokens protocol fee if present
-            5. deposit xToken to self.reserve1
-            6. deposit amountOut to to
-            7. emit event
-         */
+    pub fun swapBitrootToFlow(yTokens: @BitrootToken.Vault, to: &{FlowToken.Receiver}, minAmountOut: UFix64) {
+        // 1.  - check yTokens not empty
+        pre {
+            yTokens.balance > UFix64(0): "Amount sent must be greater than zero"
+        }
+        // 2. getAmountOut
+        let amountOut = self.getAmountOut(
+            input_amount: yTokens.balance, 
+            input_reserve: self.reserve1.balance, 
+            output_reserve: self.reserve0.balance
+        )
+        // 3. assert amoutOut >= minAmountOut
+        assert(amountOut >= minAmountOut, message: "Rat too bad")
+        // 4. withdraw amountOut
+        let xTokens = <-self.reserve0.withdraw(amount: amountOut)
+        //(5a). deposit yTokens protocol fee if present
+        // protocol fee
+        // 5. deposit yToken to self.reserve0
+        self.reserve1.deposit(<- yTokens)
+        // 6. deposit amountOut to to
+        to.deposit(<- xTokens)
+        // 7. emit event
+        //emit swap()
     }
 //
     //// this low-level function should be called from a contract which performs important safety checks
