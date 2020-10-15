@@ -78,10 +78,10 @@ pub contract MonoswapFTPair: MonoswapFTPairI, FungibleToken {
         self.token1  <- Bitroot.createEmptyVault();
         self.blockTimestampLast = UInt256(0);
 
-        self.fee = UInt64(0);
+        self.fee = UFix64(0);
 
         self.totalSupply = 0.0;
-        self.MINIMUM_LIQUIDITY = 1000;
+        self.MINIMUM_LIQUIDITY = UFix64(1000);
         self.minter <- create Minter();
 
     }
@@ -102,6 +102,7 @@ pub contract MonoswapFTPair: MonoswapFTPairI, FungibleToken {
         pub fun burnTokens(from: @FungibleToken.Vault) {
             let vault <- from as! @MonoswapFTPair.Vault
             let amount = vault.balance
+            MonoswapFTPair.totalSupply = MonoswapFTPair.totalSupply - amount
             destroy vault
             emit TokensBurned(amount: amount)
         }
@@ -225,16 +226,40 @@ pub contract MonoswapFTPair: MonoswapFTPairI, FungibleToken {
     //    if (feeOn) kLast = uint(reserve0).mul(reserve1); // reserve0 and reserve1 are up-to-date
     //    emit Burn(msg.sender, amount0, amount1, to);
     //}
-    pub fun addLiquidity() {
-
+    pub fun addLiquidity(ltReceiver: &{Receiver}, xTokens: @FlowToken.Vault, yTokens: @BitrootToken.Vault) {
+        pre {
+            // liquidty sent close enought to current pools ratio which is essentially price
+            // allow 1% diff
+            // TODO: refactor to use getPrice instead of imperatie calls to reserves
+            (xTokens.balance / yTokens.balance - self.reserve0.balance / self.reserve1.balance) < 0.01: "Wrong ratio"
+            (xTokens.balance / yTokens.balance - self.reserve0.balance / self.reserve1.balance) > (-0.01): "Wrong ratio"
+        }
+        // just deposits all the tokens into reserves but mints lTokens corresponding the current reserves ratio
+        let deposit_to_reserve_ratio = (xTokens.balance / self.reserve0.balance + yTokens.balance / self.reserve1.balance) / 2  
+        let liquidity_amount = self.totalSupply * deposit_to_reserve_ratio
+        //mint new liequidity tokens and deposit them
+        ltReceiver.deposit(<-self.minter.mintTokens(amount: liquidity_amount))
+        // add liquidity to reserves
+        self.reserve0.deposit(xTokens)
+        self.reserve1.deposit(yTokens)
+        // emit added liquidity event
     }
-    pub fun withdrawLiquidity() {
+    /*
+        Top level interfact recievers to make it reusable
+        It's fine as the actuall token implementations are expected to cast the receivers into their respective types.break
+        TODO: asses impact if they do not do it, possibly there is a loophole to make a irrevesible sink for other types of tokens
+     */
+    pub fun withdrawLiquidity(lTokens: FungibleToken@Vault, xReceiver: &{FungibleToken.Receiver}, yReceiver: &{FungibleToken.Receiver}) {
+        let liquidity_fraction = self.totalSupply / lTokens.balance
+        let xShare <- self.reserve0.withdraw(self.reserve0.balance * liquidity_fraction)
+        let yShare <- self.reserve1.withdraw(self.reserve1.balance * liquidity_fraction)
 
+        xReceiver.deposit(<-xShare)
+        yReceiver.deposit(<-yShare)
+
+        self.minter.burnTokens(from: lTokens)
     }
-
-    access(contract) fun mint() {
-
-    }   
+ 
     pub fun quote(
         input_amount: UFix64,
         input_reserve:UFix64,
