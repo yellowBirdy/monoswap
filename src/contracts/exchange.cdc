@@ -1,9 +1,32 @@
-import FungibleToken from x0FUNGIBLETOKENADDRESS
-import FlowToken from x0FLOWTOKENADDRESS
-import BitrootToken from x0BITROOTTOKENADDRESS
+import FungibleToken from 0x01
+import FlowToken from 0x02
+import Bitroot from 0x03
 
 pub contract MonoswapFTPair: FungibleToken {
+    // Total supply of Flow tokens in existence
+    pub var totalSupply: UFix64
 
+    // Event that is emitted when the contract is created
+    pub event TokensInitialized(initialSupply: UFix64)
+
+    // Event that is emitted when tokens are withdrawn from a Vault
+    pub event TokensWithdrawn(amount: UFix64, from: Address?)
+
+    // Event that is emitted when tokens are deposited to a Vault
+    pub event TokensDeposited(amount: UFix64, to: Address?)
+
+    // Event that is emitted when new tokens are minted
+    pub event TokensMinted(amount: UFix64)
+
+    // Event that is emitted when tokens are destroyed
+    pub event TokensBurned(amount: UFix64)
+
+    // Event that is emitted when a new minter resource is created
+    pub event MinterCreated(allowedAmount: UFix64)
+
+    // Event that is emitted when a new burner resource is created
+    pub event BurnerCreated()
+    
     pub let MINIMUM_LIQUIDITY: UFix64;
     //pub let factory Address;
     pub let xToken: Address;  //FLOW
@@ -49,14 +72,14 @@ pub contract MonoswapFTPair: FungibleToken {
     }
 
     init() {
-        self.xToken = x0FLOWTOKENADDRESS
-        self.yToken = x0BITROOTTOKENADDRESS
+        self.xToken = 0x02
+        self.yToken = 0x03
         self.xName = "FlowToken"
         self.yName = "Bitroot"
 
         self.xReserve <- FlowToken.createEmptyVault();
         self.yReserve  <- Bitroot.createEmptyVault();
-        self.blockTimestampLast = UInt256(0);
+        //self.blockTimestampLast = UInt256(0);
 
         self.fee = UFix64(0);
 
@@ -84,7 +107,7 @@ pub contract MonoswapFTPair: FungibleToken {
             let amount = vault.balance
             MonoswapFTPair.totalSupply = MonoswapFTPair.totalSupply - amount
             destroy vault
-            emit TokensBurned(amount: amount)
+            //emit TokensBurned(amount: amount)
         }
     }
     
@@ -115,7 +138,7 @@ pub contract MonoswapFTPair: FungibleToken {
         }
     }
 
-    pub fun addLiquidity(ltReceiver: &{Receiver}, xTokens: @FlowToken.Vault, yTokens: @BitrootToken.Vault) {
+    pub fun addLiquidity(ltReceiver: &{FungibleToken.Receiver}, xTokens: @FungibleToken.Vault, yTokens: @FungibleToken.Vault) {
         pre {
             // allow 1% diff
             // TODO: refactor to use getPrice instead of imperatie calls to reserves
@@ -126,10 +149,10 @@ pub contract MonoswapFTPair: FungibleToken {
         let deposit_to_reserve_ratio = (xTokens.balance / self.xReserve.balance + yTokens.balance / self.yReserve.balance) / 2  
         let liquidity_amount = self.totalSupply * deposit_to_reserve_ratio
         //mint new liequidity tokens and deposit them
-        ltReceiver.deposit(<-self.minter.mintTokens(amount: liquidity_amount))
+        ltReceiver.deposit(from: <-self.minter.mintTokens(amount: liquidity_amount))
         // add liquidity to reserves
-        self.xReserve.deposit(xTokens)
-        self.yReserve.deposit(yTokens)
+        self.xReserve.deposit(from: <-xTokens)
+        self.yReserve.deposit(from: <-yTokens)
         // emit added liquidity event
     }
     /*
@@ -137,7 +160,7 @@ pub contract MonoswapFTPair: FungibleToken {
         It's fine as the actuall token implementations are expected to cast the receivers into their respective types.break
         TODO: asses impact if they do not do it, possibly there is a loophole to make a irrevesible sink for other types of tokens
      */
-    pub fun withdrawLiquidity(lTokens: FungibleToken@Vault, xReceiver: &{FungibleToken.Receiver}, yReceiver: &{FungibleToken.Receiver}) {
+    pub fun withdrawLiquidity(lTokens: @FungibleToken.Vault, xReceiver: &{FungibleToken.Receiver}, yReceiver: &{FungibleToken.Receiver}) {
         let liquidity_fraction = self.totalSupply / lTokens.balance
         let xShare <- self.xReserve.withdraw(self.xReserve.balance * liquidity_fraction)
         let yShare <- self.yReserve.withdraw(self.yReserve.balance * liquidity_fraction)
