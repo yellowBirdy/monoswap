@@ -1,4 +1,4 @@
-import FungibleToken from 0x01
+import FungibleToken from 0xee82856bf20e2aa6
 
 
 // BitrootBitroot.cdc

@@ -1,6 +1,6 @@
-import FungibleToken from 0x01
-import FlowToken from 0x02
-import Bitroot from 0x03
+import FungibleToken from 0xee82856bf20e2aa6
+import FlowToken from 0x01cf0e2f2f715450
+import Bitroot from 0x179b6b1cb6755e31
 
 pub contract MonoswapFTPair: FungibleToken {
     // Total supply of Flow tokens in existence
