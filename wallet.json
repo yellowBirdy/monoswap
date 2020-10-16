@@ -1,0 +1,59 @@
+{
+	"accounts": {
+		"FauxFlow": {
+			"address": "01cf0e2f2f715450",
+			"privateKey": "a9a81cdf716f763ac53f59a421e19039dd542ff3a294bde647989841618ea4db",
+			"sigAlgorithm": "ECDSA_P256",
+			"hashAlgorithm": "SHA3_256"
+		},
+		"Bitroot": {
+			"address": "179b6b1cb6755e31",
+			"privateKey": "a9a81cdf716f763ac53f59a421e19039dd542ff3a294bde647989841618ea4db",
+			"sigAlgorithm": "ECDSA_P256",
+			"hashAlgorithm": "SHA3_256"
+		},
+		"Exchange": {
+			"address": "f3fcd2c1a78f5eee",
+			"privateKey": "a9a81cdf716f763ac53f59a421e19039dd542ff3a294bde647989841618ea4db",
+			"sigAlgorithm": "ECDSA_P256",
+			"hashAlgorithm": "SHA3_256"
+		},
+		"User1": {
+			"address": "e03daebed8ca0615",
+			"privateKey": "a9a81cdf716f763ac53f59a421e19039dd542ff3a294bde647989841618ea4db",
+			"sigAlgorithm": "ECDSA_P256",
+			"hashAlgorithm": "SHA3_256"
+		},
+		"User2": {
+			"address": "045a1763c93006ca",
+			"privateKey": "a9a81cdf716f763ac53f59a421e19039dd542ff3a294bde647989841618ea4db",
+			"sigAlgorithm": "ECDSA_P256",
+			"hashAlgorithm": "SHA3_256"
+		},
+        "User3": {
+			"address": "120e725050340cab",
+			"privateKey": "a9a81cdf716f763ac53f59a421e19039dd542ff3a294bde647989841618ea4db",
+			"sigAlgorithm": "ECDSA_P256",
+			"hashAlgorithm": "SHA3_256"
+		}, 
+        "User4": {
+			"address": "f669cb8d41ce0c74",
+			"privateKey": "a9a81cdf716f763ac53f59a421e19039dd542ff3a294bde647989841618ea4db",
+			"sigAlgorithm": "ECDSA_P256",
+			"hashAlgorithm": "SHA3_256"
+		}, 
+        "User5": {
+			"address": "192440c99cb17282",
+			"privateKey": "a9a81cdf716f763ac53f59a421e19039dd542ff3a294bde647989841618ea4db",
+			"sigAlgorithm": "ECDSA_P256",
+			"hashAlgorithm": "SHA3_256"
+		}, 
+        "User6": {
+			"address": "fd43f9148d4b725d",
+			"privateKey": "a9a81cdf716f763ac53f59a421e19039dd542ff3a294bde647989841618ea4db",
+			"sigAlgorithm": "ECDSA_P256",
+			"hashAlgorithm": "SHA3_256"
+		}
+	}
+}
+ 
