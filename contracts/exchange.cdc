@@ -1,5 +1,5 @@
 import FungibleToken from 0xee82856bf20e2aa6
-import FauxFlow from 0x01cf0e2f2f715450
+import FlowToken from 0x01cf0e2f2f715450
 import Bitroot from 0x179b6b1cb6755e31
 
 pub contract MonoswapFTPair: FungibleToken {
@@ -41,6 +41,7 @@ pub contract MonoswapFTPair: FungibleToken {
     pub var fee: UFix64;
 
     access(contract) let minter: @Minter;
+    pub var totalSupply: UFix64;
  
     /* ORACLE provisions
 
@@ -71,12 +72,12 @@ pub contract MonoswapFTPair: FungibleToken {
     }
 
     init() {
-        self.xToken = 0x01cf0e2f2f715450 // 0x02
-        self.yToken = 0x179b6b1cb6755e31 // 0x03
-        self.xName = "FauxFlow"
+        self.xToken = 0x02
+        self.yToken = 0x03
+        self.xName = "FlowToken"
         self.yName = "Bitroot"
 
-        self.xReserve <- FauxFlow.createEmptyVault();
+        self.xReserve <- FlowToken.createEmptyVault();
         self.yReserve  <- Bitroot.createEmptyVault();
         //self.blockTimestampLast = UInt256(0);
 
@@ -89,6 +90,7 @@ pub contract MonoswapFTPair: FungibleToken {
     }
 
     // FT stuff
+
     pub resource Minter {
 
         pub fun mintTokens(amount: UFix64): @MonoswapFTPair.Vault {
@@ -117,16 +119,17 @@ pub contract MonoswapFTPair: FungibleToken {
             self.balance = balance
         }
     
-        pub fun withdraw(amount: UFix64): @FungibleToken.Vault {
+
+      pub fun withdraw(amount: UFix64): @FungibleToken.Vault {
             self.balance = self.balance - amount
             emit TokensWithdrawn(amount: amount, from: self.owner?.address)
             return <-create Vault(balance: amount)
         }
-
         pub fun deposit(from: @FungibleToken.Vault) {
-            let vault <- from as! @FauxFlow.Vault
+            let vault <- from as! @FlowToken.Vault
             self.balance = self.balance + vault.balance
             emit TokensDeposited(amount: vault.balance, to: self.owner?.address)
+            vault.balance = 0.0
             destroy vault
         }
 
@@ -140,10 +143,10 @@ pub contract MonoswapFTPair: FungibleToken {
             // allow 1% diff
             // TODO: refactor to use getPrice instead of imperatie calls to reserves
             (xTokens.balance / yTokens.balance - self.getXPrice()) < 0.01: "Wrong ratio"
-            (Fix64(xTokens.balance / yTokens.balance - self.getYPrice())) > (-0.01): "Wrong ratio"
+            (xTokens.balance / yTokens.balance - self.getYPrice()) > (-0.01): "Wrong ratio"
         }
         // just deposits all the tokens into reserves but mints lTokens corresponding the current reserves ratio
-        let deposit_to_reserve_ratio = (xTokens.balance / self.xReserve.balance + yTokens.balance / self.yReserve.balance) / UFix64(2)  
+        let deposit_to_reserve_ratio = (xTokens.balance / self.xReserve.balance + yTokens.balance / self.yReserve.balance) / 2  
         let liquidity_amount = self.totalSupply * deposit_to_reserve_ratio
         //mint new liequidity tokens and deposit them
         ltReceiver.deposit(from: <-self.minter.mintTokens(amount: liquidity_amount))
@@ -159,13 +162,13 @@ pub contract MonoswapFTPair: FungibleToken {
      */
     pub fun withdrawLiquidity(lTokens: @FungibleToken.Vault, xReceiver: &{FungibleToken.Receiver}, yReceiver: &{FungibleToken.Receiver}) {
         let liquidity_fraction = self.totalSupply / lTokens.balance
-        let xShare <- self.xReserve.withdraw(amount: self.xReserve.balance * liquidity_fraction)
-        let yShare <- self.yReserve.withdraw(amount: self.yReserve.balance * liquidity_fraction)
+        let xShare <- self.xReserve.withdraw(self.xReserve.balance * liquidity_fraction)
+        let yShare <- self.yReserve.withdraw(self.yReserve.balance * liquidity_fraction)
 
-        xReceiver.deposit(from: <-xShare)
-        yReceiver.deposit(from: <-yShare)
+        xReceiver.deposit(<-xShare)
+        yReceiver.deposit(<-yShare)
 
-        self.minter.burnTokens(from: <-lTokens)
+        self.minter.burnTokens(from: lTokens)
     }
  
     pub fun quote(
@@ -213,13 +216,13 @@ pub contract MonoswapFTPair: FungibleToken {
         // 3. assert amoutOut >= minAmountOut
         assert(amountOut >= minAmountOut, message: "Rat too bad")
         // 4. withdraw amountOut
-        let yTokens <- self.yReserve.withdraw(amount: amountOut)
+        let yTokens = <-self.yReserve.withdraw(amount: amountOut)
         //(5a). deposit xTokens protocol fee if present
         // protocol fee
         // 5. deposit xToken to self.xReserve
-        self.xReserve.deposit(from: <- xTokens)
+        self.xReserve.deposit(<- xTokens)
         // 6. deposit amountOut to to
-        to.deposit(from: <- yTokens)
+        to.deposit(<- yTokens)
         // 7. emit event
         //emit swap()
     }
@@ -237,13 +240,13 @@ pub contract MonoswapFTPair: FungibleToken {
         // 3. assert amoutOut >= minAmountOut
         assert(amountOut >= minAmountOut, message: "Rat too bad")
         // 4. withdraw amountOut
-        let xTokens <- self.xReserve.withdraw(amount: amountOut)
+        let xTokens = <-self.xReserve.withdraw(amount: amountOut)
         //(5a). deposit yTokens protocol fee if present
         // protocol fee
         // 5. deposit yToken to self.xReserve
-        self.yReserve.deposit(from: <- yTokens)
+        self.yReserve.deposit(<- yTokens)
         // 6. deposit amountOut to to
-        to.deposit(from: <- xTokens)
+        to.deposit(<- xTokens)
         // 7. emit event
         //emit swap()
     }
