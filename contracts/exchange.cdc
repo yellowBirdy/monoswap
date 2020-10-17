@@ -125,7 +125,7 @@ pub contract MonoswapFTPair: FungibleToken {
         }
 
         pub fun deposit(from: @FungibleToken.Vault) {
-            let vault <- from as! @FauxFlow.Vault
+            let vault <- from as! @MonoswapFTPair.Vault
             self.balance = self.balance + vault.balance
             emit TokensDeposited(amount: vault.balance, to: self.owner?.address)
             destroy vault
