@@ -128,7 +128,7 @@ pub contract MonoswapFTPair: FungibleToken {
             let vault <- from as! @Vault
             self.balance = self.balance + vault.balance
             emit TokensDeposited(amount: vault.balance, to: self.owner?.address)
-            vault.balance = 0.0
+           destroy vault // can't set vault.balance to 0, but it is safe to destroy since balance has been transferred
             destroy vault
         }
 
@@ -255,4 +255,3 @@ pub contract MonoswapFTPair: FungibleToken {
     }
 
 }
-
