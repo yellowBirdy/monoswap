@@ -34,6 +34,8 @@ pub contract MonoswapFTPair: FungibleToken {
     pub let xName: String;
     pub let yName: String;
 
+    access(contract) let minimum_liquidity_locked: @FungibleToken.Vault;
+
     access(contract) var xReserve: @FungibleToken.Vault;  //  balance accessible via getReserves         
     access(contract) var yReserve: @FungibleToken.Vault;  //  balance accessible via getReserves       
   //  access(contract) var blockTimestampLast: UInt256;   //  accessible via getReserves
@@ -83,7 +85,9 @@ pub contract MonoswapFTPair: FungibleToken {
         self.fee = UFix64(0);
 
         self.totalSupply = 0.0;
-        self.MINIMUM_LIQUIDITY = UFix64(1000);
+        //TODO: figure out why Uniswap has MINIMUM_LIQUIDITY as high as 1000
+        self.MINIMUM_LIQUIDITY = UFix64(100);
+        self.minimum_liquidity_locked <- MonoswapFTPair.createEmptyVault();
         self.minter <- create Minter();
 
     }
@@ -128,7 +132,7 @@ pub contract MonoswapFTPair: FungibleToken {
             let vault <- from as! @Vault
             self.balance = self.balance + vault.balance
             emit TokensDeposited(amount: vault.balance, to: self.owner?.address)
-           destroy vault // can't set vault.balance to 0, but it is safe to destroy since balance has been transferred
+            vault.balance = 0.0
             destroy vault
         }
 
@@ -142,15 +146,25 @@ pub contract MonoswapFTPair: FungibleToken {
     }
 
     pub fun addLiquidity(ltReceiver: &{FungibleToken.Receiver}, xTokens: @FungibleToken.Vault, yTokens: @FungibleToken.Vault) {
-        pre {
+        //pre {
             // allow 1% diff
             // TODO: refactor to use getPrice instead of imperatie calls to reserves
-            (xTokens.balance / yTokens.balance - self.getXPrice()) < 0.01: "Wrong ratio"
-            (Fix64(xTokens.balance / yTokens.balance - self.getYPrice())) > (-0.01): "Wrong ratio"
+        //    (xTokens.balance / yTokens.balance - self.getXPrice()) < 0.01: "Wrong ratio"
+        //    (Fix64(xTokens.balance / yTokens.balance - self.getYPrice())) > (-0.01): "Wrong ratio"
+        //}
+        var liquidity_amount =  UFix64(0);
+        if (self.totalSupply > 0.0) {
+            assert((Fix64(xTokens.balance / yTokens.balance) - Fix64(self.getXPrice())) < Fix64(0.01), message: "Wrong ratio")
+            assert((Fix64(xTokens.balance / yTokens.balance) - Fix64(self.getYPrice())) > Fix64(-0.01), message: "Wrong ratio")
+            // just deposits all the tokens into reserves but mints lTokens corresponding the current reserves ratio
+            //TODO: below should be min instead of mean to be more precise, but cos of the assertions above should be fine
+            let deposit_to_reserve_ratio = (xTokens.balance / self.xReserve.balance + yTokens.balance / self.yReserve.balance) / 2.0  
+            liquidity_amount = self.totalSupply * deposit_to_reserve_ratio
+        } else {
+             // Monkey copied from Uniswap, i belive it is arbitrary
+            liquidity_amount = xTokens.balance * yTokens.balance / 100.0 - self.MINIMUM_LIQUIDITY
+            self.minimum_liquidity_locked.deposit(from: <- self.minter.mintTokens(amount: self.MINIMUM_LIQUIDITY))
         }
-        // just deposits all the tokens into reserves but mints lTokens corresponding the current reserves ratio
-        let deposit_to_reserve_ratio = (xTokens.balance / self.xReserve.balance + yTokens.balance / self.yReserve.balance) / 2.0  
-        let liquidity_amount = self.totalSupply * deposit_to_reserve_ratio
         //mint new liequidity tokens and deposit them
         ltReceiver.deposit(from: <-self.minter.mintTokens(amount: liquidity_amount))
         // add liquidity to reserves
