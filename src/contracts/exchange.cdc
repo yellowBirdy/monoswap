@@ -2,6 +2,7 @@ import FungibleToken from 0xee82856bf20e2aa6
 import FauxFlow from 0x01cf0e2f2f715450
 import Bitroot from 0x179b6b1cb6755e31
 
+
 pub contract MonoswapFTPair: FungibleToken {
     // Total supply of Flow tokens in existence
     pub var totalSupply: UFix64
@@ -73,12 +74,12 @@ pub contract MonoswapFTPair: FungibleToken {
     }
 
     init() {
-        self.xToken = 0x01cf0e2f2f715450 // 0x02
-        self.yToken = 0x179b6b1cb6755e31 // 0x03
-        self.xName = "FauxFlow"
+        self.xToken = 0x02
+        self.yToken = 0x03
+        self.xName = "FlowToken"
         self.yName = "Bitroot"
 
-        self.xReserve <- FauxFlow.createEmptyVault();
+        self.xReserve <- FlowToken.createEmptyVault();
         self.yReserve  <- Bitroot.createEmptyVault();
         //self.blockTimestampLast = UInt256(0);
 
@@ -93,6 +94,7 @@ pub contract MonoswapFTPair: FungibleToken {
     }
 
     // FT stuff
+
     pub resource Minter {
 
         pub fun mintTokens(amount: UFix64): @MonoswapFTPair.Vault {
@@ -121,17 +123,17 @@ pub contract MonoswapFTPair: FungibleToken {
             self.balance = balance
         }
     
-        pub fun withdraw(amount: UFix64): @FungibleToken.Vault {
+
+      pub fun withdraw(amount: UFix64): @FungibleToken.Vault {
             self.balance = self.balance - amount
             emit TokensWithdrawn(amount: amount, from: self.owner?.address)
             return <-create Vault(balance: amount)
         }
-
         pub fun deposit(from: @FungibleToken.Vault) {
-
             let vault <- from as! @Vault
             self.balance = self.balance + vault.balance
             emit TokensDeposited(amount: vault.balance, to: self.owner?.address)
+            vault.balance = 0.0
             destroy vault
         }
 
@@ -154,7 +156,7 @@ pub contract MonoswapFTPair: FungibleToken {
         var liquidity_amount =  UFix64(0);
         if (self.totalSupply > 0.0) {
             assert((Fix64(xTokens.balance / yTokens.balance) - Fix64(self.getXPrice())) < Fix64(0.01), message: "Wrong ratio")
-            assert((Fix64(xTokens.balance / yTokens.balance) - Fix64(self.getYPrice())) > Fix64(-0.01), message: "Wrong ratio")
+            assert((Fix64(xTokens.balance / yTokens.balance) - Fix64(self.getXPrice())) > Fix64(-0.01), message: "Wrong ratio")
             // just deposits all the tokens into reserves but mints lTokens corresponding the current reserves ratio
             //TODO: below should be min instead of mean to be more precise, but cos of the assertions above should be fine
             let deposit_to_reserve_ratio = (xTokens.balance / self.xReserve.balance + yTokens.balance / self.yReserve.balance) / 2.0  
@@ -232,8 +234,7 @@ pub contract MonoswapFTPair: FungibleToken {
         // 3. assert amoutOut >= minAmountOut
         assert(amountOut >= minAmountOut, message: "Rat too bad")
         // 4. withdraw amountOut
-        let yTokens <- self.yReserve.withdraw(amount: amountOut)
-
+        let yTokens  <-self.yReserve.withdraw(amount: amountOut)
         //(5a). deposit xTokens protocol fee if present
         // protocol fee
         // 5. deposit xToken to self.xReserve
@@ -257,8 +258,7 @@ pub contract MonoswapFTPair: FungibleToken {
         // 3. assert amoutOut >= minAmountOut
         assert(amountOut >= minAmountOut, message: "Rat too bad")
         // 4. withdraw amountOut
-        let xTokens <- self.xReserve.withdraw(amount: amountOut)
-
+        let xTokens <-self.xReserve.withdraw(amount: amountOut)
         //(5a). deposit yTokens protocol fee if present
         // protocol fee
         // 5. deposit yToken to self.xReserve
@@ -270,3 +270,4 @@ pub contract MonoswapFTPair: FungibleToken {
     }
 
 }
+
