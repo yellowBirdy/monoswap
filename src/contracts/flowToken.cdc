@@ -2,9 +2,9 @@ import FungibleToken from 0xee82856bf20e2aa6
 
 // A fake Flow token for testing
 
-pub contract FauxFlow: FungibleToken {
+pub contract FlowToken: FungibleToken {
 
-    /// Total supply of FauxFlows in existence
+    /// Total supply of FlowTokens in existence
     pub var totalSupply: UFix64
 
     /// TokensInitialized
@@ -90,7 +90,7 @@ pub contract FauxFlow: FungibleToken {
         /// been consumed and therefore can be destroyed.
         ///
         pub fun deposit(from: @FungibleToken.Vault) {
-            let vault <- from as! @FauxFlow.Vault
+            let vault <- from as! @FlowToken.Vault
             self.balance = self.balance + vault.balance
             emit TokensDeposited(amount: vault.balance, to: self.owner?.address)
             vault.balance = 0.0
@@ -98,7 +98,7 @@ pub contract FauxFlow: FungibleToken {
         }
 
         destroy() {
-            FauxFlow.totalSupply = FauxFlow.totalSupply - self.balance
+            FlowToken.totalSupply = FlowToken.totalSupply - self.balance
         }
     }
 
@@ -148,12 +148,12 @@ pub contract FauxFlow: FungibleToken {
         /// Function that mints new tokens, adds them to the total supply,
         /// and returns them to the calling context.
         ///
-        pub fun mintTokens(amount: UFix64): @FauxFlow.Vault {
+        pub fun mintTokens(amount: UFix64): @FlowToken.Vault {
             pre {
                 amount > 0.0: "Amount minted must be greater than zero"
                 amount <= self.allowedAmount: "Amount minted must be less than the allowed amount"
             }
-            FauxFlow.totalSupply = FauxFlow.totalSupply + amount
+            FlowToken.totalSupply = FlowToken.totalSupply + amount
             self.allowedAmount = self.allowedAmount - amount
             emit TokensMinted(amount: amount)
             return <-create Vault(balance: amount)
@@ -178,7 +178,7 @@ pub contract FauxFlow: FungibleToken {
         /// total supply in the Vault destructor.
         ///
         pub fun burnTokens(from: @FungibleToken.Vault) {
-            let vault <- from as! @FauxFlow.Vault
+            let vault <- from as! @FlowToken.Vault
             let amount = vault.balance
             destroy vault
             emit TokensBurned(amount: amount)
@@ -191,26 +191,26 @@ pub contract FauxFlow: FungibleToken {
         // Create the Vault with the total supply of tokens and save it in storage
         //
         let vault <- create Vault(balance: self.totalSupply)
-        self.account.save(<-vault, to: /storage/FauxFlowVault)
+        self.account.save(<-vault, to: /storage/FlowTokenVault)
 
         // Create a public capability to the stored Vault that only exposes
         // the `deposit` method through the `Receiver` interface
         //
         self.account.link<&{FungibleToken.Receiver}>(
-            /public/FauxFlowReceiver,
-            target: /storage/FauxFlowVault
+            /public/FlowTokenReceiver,
+            target: /storage/FlowTokenVault
         )
 
         // Create a public capability to the stored Vault that only exposes
         // the `balance` field through the `Balance` interface
         //
-        self.account.link<&FauxFlow.Vault{FungibleToken.Balance}>(
-            /public/FauxFlowBalance,
-            target: /storage/FauxFlowVault
+        self.account.link<&FlowToken.Vault{FungibleToken.Balance}>(
+            /public/FlowTokenBalance,
+            target: /storage/FlowTokenVault
         )
 
         let admin <- create Administrator()
-        self.account.save(<-admin, to: /storage/FauxFlowAdmin)
+        self.account.save(<-admin, to: /storage/FlowTokenAdmin)
 
         // Emit an event that shows that the contract was initialized
         //
