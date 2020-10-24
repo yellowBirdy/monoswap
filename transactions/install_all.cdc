@@ -1,8 +1,7 @@
 import FungibleToken from 0xee82856bf20e2aa6
-import FlowToken from 0x01cf0e2f2f715450
-import Bitroot from 0x179b6b1cb6755e31
-// I presume that this is the fourth address created by the emulator
-import MonoswapFTPair from 0xf3fcd2c1a78f5eee
+import FlowToken from 0x0ae53cb6e3f42a79
+import Bitroot from 0x01cf0e2f2f715450
+import MonoswapFTPair from 0x179b6b1cb6755e31
 
 
 /*

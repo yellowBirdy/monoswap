@@ -7,7 +7,6 @@ import (
 	"github.com/versus-flow/go-flow-tooling/tooling"
 )
 
-const FauxFlow = "FauxFlow"
 const Bitroot = "Bitroot"
 const Exchange = "Exchange"
 
@@ -25,7 +24,6 @@ func main() {
 
 	fmt.Println("Deploy contracts - press ENTER")
 	fmt.Scanln()
-	flow.DeployContract(FauxFlow)
 	flow.DeployContract(Bitroot)
 	flow.DeployContract(Exchange)
 
