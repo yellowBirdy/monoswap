@@ -1,20 +1,20 @@
 import FungibleToken from 0xee82856bf20e2aa6
-import FlowToken from 0x0ae53cb6e3f42a79
+import FauxFlow from 0x179b6b1cb6755e31
 /* MINT FLOW
 */
 
 transaction(recipientAddress: Address) {
-    let tokenAdmin: &FlowToken.Administrator
+    let tokenAdmin: &FauxFlow.Administrator
     let tokenReceiver: &{FungibleToken.Receiver}
 
     prepare(signer: AuthAccount) {
         self.tokenAdmin = signer
-        .borrow<&FlowToken.Administrator>(from: /storage/flowTokenAdmin) 
+        .borrow<&FauxFlow.Administrator>(from: /storage/FauxFlowAdmin) 
         ?? panic("Signer is not the token admin")
 
         //self.tokenReceiver = signer//getAccount(recipient)
         self.tokenReceiver = getAccount(recipientAddress)
-        .getCapability(/public/flowTokenReceiver)!
+        .getCapability(/public/FauxFlowReceiver)!
         .borrow<&{FungibleToken.Receiver}>()
         ?? panic("Unable to borrow receiver reference")
     }

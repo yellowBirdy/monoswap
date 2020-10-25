@@ -8,6 +8,7 @@ import (
 )
 
 const Bitroot = "Bitroot"
+const FauxFlow = "FauxFlow"
 const Exchange = "Exchange"
 
 func ufix(input string) cadence.UFix64 {
@@ -25,6 +26,7 @@ func main() {
 	fmt.Println("Deploy contracts - press ENTER")
 	fmt.Scanln()
 	flow.DeployContract(Bitroot)
+	flow.DeployContract(FauxFlow)
 	flow.DeployContract(Exchange)
 
 	fmt.Println()
@@ -33,10 +35,12 @@ func main() {
 
 	 fmt.Println("Setting up user account")
 	// fmt.Scanln()
-	flow.CreateAccount("User0")
-	flow.SendTransactionWithArguments("install_all", "User0")
+	flow.CreateAccount("User1")
+	flow.SendTransactionWithArguments("install_all", "User1")
 
-	// flow.SendTransactionWithArguments("setup/versus", marketplace,
+	//fmt.Println("Minting Flow")
+	//flow.FindAddress(FauxFlow)
+	//flow.SendTransactionWithArguments("mint_flow", "User1",)
 	// 	ufix("0.15"),      //cut percentage,
 	// 	cadence.UInt64(5), //drop length
 	// 	cadence.UInt64(5)) //minimumBlockRemainingAfterBidOrTie

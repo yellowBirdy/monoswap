@@ -1,7 +1,7 @@
 import FungibleToken from 0xee82856bf20e2aa6
-import FlowToken from 0x0ae53cb6e3f42a79
+import FauxFlow from 0x179b6b1cb6755e31
 import Bitroot from 0x01cf0e2f2f715450
-import MonoswapFTPair from 0x179b6b1cb6755e31
+import MonoswapFTPair from 0xf3fcd2c1a78f5eee
 
 
 /*
@@ -32,22 +32,22 @@ transaction {
             )
         }
 
-        if signer.borrow<&FlowToken.Vault>(from: /storage/flowTokenVault) == nil {
-            // Create a new flowToken Vault and put it in storage
-            signer.save(<-FlowToken.createEmptyVault(), to: /storage/flowTokenVault)
+        if signer.borrow<&FauxFlow.Vault>(from: /storage/FauxFlowVault) == nil {
+            // Create a new FauxFlow Vault and put it in storage
+            signer.save(<-FauxFlow.createEmptyVault(), to: /storage/FauxFlowVault)
 
             // Create a public capability to the Vault that only exposes
             // the deposit function through the Receiver interface
-            signer.link<&FlowToken.Vault{FungibleToken.Receiver}>(
-                /public/flowTokenReceiver,
-                target: /storage/flowTokenVault
+            signer.link<&FauxFlow.Vault{FungibleToken.Receiver}>(
+                /public/FauxFlowReceiver,
+                target: /storage/FauxFlowVault
             )
 
             // Create a public capability to the Vault that only exposes
             // the balance field through the Balance interface
-            signer.link<&FlowToken.Vault{FungibleToken.Balance}>(
-                /public/flowTokenBalance,
-                target: /storage/flowTokenVault
+            signer.link<&FauxFlow.Vault{FungibleToken.Balance}>(
+                /public/FauxFlowBalance,
+                target: /storage/FauxFlowVault
             )
         }
 
