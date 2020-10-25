@@ -31,10 +31,10 @@ func main() {
 	fmt.Println()
 	fmt.Println("Contracts successfully deployed!")
 
-	// fmt.Println("MarketplaceCut: 15%, drop length: 5 ticks")
+	 fmt.Println("Setting up user account")
 	// fmt.Scanln()
-	// flow.CreateAccount(marketplace)
-	// flow.SendTransactionWithArguments("setup/actor", marketplace, ufix("0.0"))
+	flow.CreateAccount("User0")
+	flow.SendTransactionWithArguments("install_all", "User0")
 
 	// flow.SendTransactionWithArguments("setup/versus", marketplace,
 	// 	ufix("0.15"),      //cut percentage,

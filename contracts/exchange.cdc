@@ -28,6 +28,8 @@ pub contract MonoswapFTPair: FungibleToken {
     // Event that is emitted when a new burner resource is created
     pub event BurnerCreated()
 
+    pub event TokensSwapped(from: Address?, to: Address?, amountXIn: UFix64, amountYIn: UFix64, amountXOut: UFix64, amountYOut: UFix64);
+
     pub let MINIMUM_LIQUIDITY: UFix64;
     //pub let factory Address;
     pub let xToken: Address;  //FLOW
@@ -72,6 +74,7 @@ pub contract MonoswapFTPair: FungibleToken {
     pub fun getYPrice(): UFix64 {
         return self.yReserve.balance / self.xReserve.balance
     }
+    //TODO: implement get slippage (%)
 
     init() {
         self.xToken = 0x0ae53cb6e3f42a79
@@ -102,7 +105,7 @@ pub contract MonoswapFTPair: FungibleToken {
                 amount > UFix64(0): "Amount minted must be greater than zero"
             }
             MonoswapFTPair.totalSupply = MonoswapFTPair.totalSupply + amount 
-            //emit TokensMinted(amount: amount)
+            emit TokensMinted(amount: amount)
             return <-create Vault(balance: amount)
         }
 
@@ -111,7 +114,7 @@ pub contract MonoswapFTPair: FungibleToken {
             let amount = vault.balance
             MonoswapFTPair.totalSupply = MonoswapFTPair.totalSupply - amount
             destroy vault
-            //emit TokensBurned(amount: amount)
+            emit TokensBurned(amount: amount)
         }
     }
     
@@ -231,17 +234,22 @@ pub contract MonoswapFTPair: FungibleToken {
             input_reserve: self.xReserve.balance, 
             output_reserve: self.yReserve.balance
         )
-        // 3. assert amoutOut >= minAmountOut
+        // 3. assert amountOut >= minAmountOut
         assert(amountOut >= minAmountOut, message: "Rat too bad")
         // 4. withdraw amountOut
         let yTokens  <-self.yReserve.withdraw(amount: amountOut)
         //(5a). deposit xTokens protocol fee if present
         // protocol fee
-        // 5. deposit xToken to self.xReserve
+        // 5. emit event and deposit xToken to self.xReserve
+        let fromAddress = xTokens.owner?.address
+        let toAddress = to.owner?.address
+        let zero = UFix64(0)
+        emit TokensSwapped(from: fromAddress, to: toAddress, amountXIn: xTokens.balance, amountYIn: zero, amountXOut: zero, amountYOut: amountOut);
+
         self.xReserve.deposit(from: <- xTokens)
-        // 6. deposit amountOut to to
+        // 6. anddeposit amountOut to to
         to.deposit(from: <- yTokens)
-        // 7. emit event
+
         //emit swap()
     }
     pub fun swapYtoX(yTokens: @FungibleToken.Vault, to: &{FungibleToken.Receiver}, minAmountOut: UFix64) {
@@ -255,18 +263,22 @@ pub contract MonoswapFTPair: FungibleToken {
             input_reserve: self.yReserve.balance, 
             output_reserve: self.xReserve.balance
         )
-        // 3. assert amoutOut >= minAmountOut
+        // 3. assert amountOut >= minAmountOut
         assert(amountOut >= minAmountOut, message: "Rat too bad")
         // 4. withdraw amountOut
         let xTokens <-self.xReserve.withdraw(amount: amountOut)
         //(5a). deposit yTokens protocol fee if present
         // protocol fee
-        // 5. deposit yToken to self.xReserve
+        // 5. emit event and deposit yToken to self.yReserve
+        let fromAddress = yTokens.owner?.address
+        let toAddress = to.owner?.address
+        let zero = UFix64(0)
+        emit TokensSwapped(from: fromAddress, to: toAddress, amountXIn: zero, amountYIn: yTokens.balance, amountXOut: amountOut, amountYOut: zero);
+
         self.yReserve.deposit(from: <- yTokens)
         // 6. deposit amountOut to to
         to.deposit(from: <- xTokens)
-        // 7. emit event
-        //emit swap()
+
     }
 
 }
