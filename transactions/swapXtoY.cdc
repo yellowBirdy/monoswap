@@ -32,8 +32,7 @@ transaction (amountIn: UFix64) {
 
     execute {
         let prices = MonoswapFTPair.getPrices()
-        let xTokensAmount: UFix64;
-        xTokensAmount = amountIn;
+        let xTokensAmount = amountIn
         let xTokens <- self.xTokensProvider.withdraw(amount: xTokensAmount)
         // I know, it's a hudge slippage, front running attack tolerance
         let minAmountOut = (prices["y"]! * xTokensAmount) * 0.8
