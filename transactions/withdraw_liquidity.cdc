@@ -31,7 +31,5 @@ transaction(lAmount: UFix64) {
         let LPTokens <- self.LPTokensProvider.withdraw(amount: lAmount)
 
         MonoswapFTPair.withdrawLiquidity(lTokens: <-LPTokens, xReceiver: self.xTokensReceiver, yReceiver: self.yTokensReceiver)
-
-
     }
 }

@@ -20,7 +20,7 @@ transaction(recipientAddress: Address) {
     }
 
     execute {
-        let amount = UFix64(1000)
+        let amount = 1000.0
         let minter <- self.tokenAdmin.createNewMinter(allowedAmount: amount)
         let mintedVault <- minter.mintTokens(amount: amount)
 

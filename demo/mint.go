@@ -22,7 +22,6 @@ func ufix(input string) cadence.UFix64 {
 func main() {
 	flow := tooling.NewFlowConfigLocalhost()
 
-
 	fmt.Println("Minting Flow")
 	//flow.FindAddress(FauxFlow)
 	flow.SendTransactionWithArguments("mint_flow", FauxFlow, flow.FindAddress("User1"))
