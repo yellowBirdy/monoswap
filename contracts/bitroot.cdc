@@ -112,10 +112,10 @@ pub contract Bitroot: FungibleToken {
         // The domain must be `storage`, `private`, or `public`
         // the identifier can be any name
         let vault <- create Vault(balance: self.totalSupply)
-        self.account.save(<-vault, to: /storage/BaloonVault)
+        self.account.save(<-vault, to: /storage/BitrootVault)
 
         // Create a new MintAndBurn resource and store it in account storage
-        self.account.save(<-create Minter(), to: /storage/BaloonMinter)
+        self.account.save(<-create Minter(), to: /storage/BitrootMinter)
 
         // Create a private capability link for the Minter
         // Capabilities can be used to create temporary references to an object
