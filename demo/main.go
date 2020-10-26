@@ -33,10 +33,15 @@ func main() {
 	fmt.Println()
 	fmt.Println("Contracts successfully deployed!")
 
-	//fmt.Println("Setting up user account")
+	fmt.Println("Setting up user account")
 	// fmt.Scanln()
-	//flow.CreateAccount("User1")
-	//flow.SendTransactionWithArguments("install_all", "User1")
+	flow.CreateAccount("User1")
+	flow.SendTransactionWithArguments("install_all", "User1")
+	fmt.Println("Minting Flow")
+	flow.SendTransactionWithArguments("mint_flow", FauxFlow, flow.FindAddress("User1"))
+
+	fmt.Println("Minting Bitroot")
+	flow.SendTransactionWithArguments("mint_bitroot", Bitroot, flow.FindAddress("User1"))
 
 	//fmt.Println("Minting Flow")
 	//flow.FindAddress(FauxFlow)

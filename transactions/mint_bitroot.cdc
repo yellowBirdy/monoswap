@@ -20,7 +20,7 @@ transaction(recipientAddress: Address) {
     }
 
     execute {
-        let amount = 2000.0
+        let amount = UFix64(2000)
         self.tokenMinter.mintTokens(amount: amount, recipient: self.tokenReceiver)
 
     }
