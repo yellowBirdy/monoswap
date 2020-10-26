@@ -33,10 +33,10 @@ func main() {
 	fmt.Println()
 	fmt.Println("Contracts successfully deployed!")
 
-	 fmt.Println("Setting up user account")
+	//fmt.Println("Setting up user account")
 	// fmt.Scanln()
-	flow.CreateAccount("User1")
-	flow.SendTransactionWithArguments("install_all", "User1")
+	//flow.CreateAccount("User1")
+	//flow.SendTransactionWithArguments("install_all", "User1")
 
 	//fmt.Println("Minting Flow")
 	//flow.FindAddress(FauxFlow)

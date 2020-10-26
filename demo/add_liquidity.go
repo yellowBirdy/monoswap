@@ -22,9 +22,7 @@ func ufix(input string) cadence.UFix64 {
 func main() {
 	flow := tooling.NewFlowConfigLocalhost()
 
-	fmt.Println("Minting Flow")
-	flow.SendTransactionWithArguments("mint_flow", FauxFlow, flow.FindAddress("User1"))
+	fmt.Println("Adding Liquidity")
+	flow.SendTransactionWithArguments("add_liquidity", "User1", ufix("1000.0"), ufix("500.0"))
 
-	fmt.Println("Minting Bitroot")
-	flow.SendTransactionWithArguments("mint_bitroot", Bitroot, flow.FindAddress("User1"))
 }

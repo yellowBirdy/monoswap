@@ -1,6 +1,7 @@
 import FungibleToken from 0xee82856bf20e2aa6
-import FlowToken from 0x0ae53cb6e3f42a79
 import Bitroot from 0x01cf0e2f2f715450
+import FauxFlow from 0x179b6b1cb6755e31
+
 
 
 pub contract MonoswapFTPair: FungibleToken {
@@ -77,12 +78,12 @@ pub contract MonoswapFTPair: FungibleToken {
     //TODO: implement get slippage (%)
 
     init() {
-        self.xToken = 0x0ae53cb6e3f42a79
+        self.xToken = 0x179b6b1cb6755e31
         self.yToken = 0x01cf0e2f2f715450
-        self.xName = "FlowToken"
+        self.xName = "FauxFlow"
         self.yName = "Bitroot"
 
-        self.xReserve <- FlowToken.createEmptyVault();
+        self.xReserve <- FauxFlow.createEmptyVault();
         self.yReserve  <- Bitroot.createEmptyVault();
         //self.blockTimestampLast = UInt256(0);
 
