@@ -19,6 +19,26 @@ func ufix(input string) cadence.UFix64 {
 	return amount
 }
 
+type Balance struct {
+	token   string
+	balance float64
+}
+
+func decodeBalance(b []struct {
+	token   string
+	balance cadence.UFix64
+}) []Balance {
+	balances := []Balance{}
+	for _, balance := range b {
+		balances = append(balances, Balance{
+			token:   balance.token,
+			balance: float64(balance.balance),
+		})
+	}
+
+	return balances
+}
+
 func main() {
 	flow := tooling.NewFlowConfigLocalhost()
 
@@ -30,6 +50,7 @@ func main() {
 
 	fmt.Println("ACCOUNT BALANCES")
 	flow.RunScript("get_account_balances", flow.FindAddress("User1"))
+
 	//fmt.Println("Minting Flow")
 	//flow.FindAddress(FauxFlow)
 	//flow.SendTransactionWithArguments("mint_flow", "User1",)
