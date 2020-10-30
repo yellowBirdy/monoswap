@@ -72,7 +72,7 @@ pub contract MonoswapFTPair: FungibleToken {
     pub fun getXPrice(): UFix64 {
         return self.xReserve.balance / self.yReserve.balance
     }
-    pub fun getYPrice(): UFix64 {
+    pub fun getYPrice(): UFix64 { 
         return self.yReserve.balance / self.xReserve.balance
     }
     //TODO: implement get slippage (%)
@@ -113,7 +113,6 @@ pub contract MonoswapFTPair: FungibleToken {
         pub fun burnTokens(from: @FungibleToken.Vault) {
             let vault <- from as! @MonoswapFTPair.Vault
             let amount = vault.balance
-            MonoswapFTPair.totalSupply = MonoswapFTPair.totalSupply - amount
             destroy vault
             emit TokensBurned(amount: amount)
         }
@@ -183,7 +182,7 @@ pub contract MonoswapFTPair: FungibleToken {
         TODO: asses impact if they do not do it, possibly there is a loophole to make a irrevesible sink for other types of tokens
      */
     pub fun withdrawLiquidity(lTokens: @FungibleToken.Vault, xReceiver: &{FungibleToken.Receiver}, yReceiver: &{FungibleToken.Receiver}) {
-        let liquidity_fraction = self.totalSupply / lTokens.balance
+        let liquidity_fraction =  lTokens.balance / self.totalSupply
         let xShare <- self.xReserve.withdraw(amount: self.xReserve.balance * liquidity_fraction)
         let yShare <- self.yReserve.withdraw(amount: self.yReserve.balance * liquidity_fraction)
 

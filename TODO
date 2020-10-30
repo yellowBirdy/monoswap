@@ -7,7 +7,12 @@
 
 * make swaps return info object
 
+
+
+
 DOWN THE ROAD
+
+* subscribe to events
 
 * check how intial liquidity can't be fully withdrawn cos of the mimum liquidity, and exact reasons for introducing that
 
