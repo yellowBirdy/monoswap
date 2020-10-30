@@ -251,7 +251,6 @@ pub contract MonoswapFTPair: FungibleToken {
         // 6. anddeposit amountOut to to
         to.deposit(from: <- yTokens)
 
-        //emit swap()
     }
     pub fun swapYtoX(yTokens: @FungibleToken.Vault, to: &{FungibleToken.Receiver}, minAmountOut: UFix64) {
         // 1.  - check yTokens not empty

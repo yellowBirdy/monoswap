@@ -23,6 +23,6 @@ func main() {
 	flow := tooling.NewFlowConfigLocalhost()
 
 	fmt.Println("Adding Liquidity")
-	flow.SendTransactionWithArguments("add_liquidity", "User1", ufix("1000.0"), ufix("500.0"))
+	flow.SendTransactionWithArguments("add_liquidity", "User1", ufix("500.0"), ufix("500.0"))
 
 }

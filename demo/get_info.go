@@ -26,11 +26,12 @@ func main() {
 	fmt.Println("RESERVES")
 	flow.RunScript("get_reserves")
 	fmt.Println("TOTAL SUPPLY (LP TOKENS)")
-	flow.RunScript("get_total_supply")
+	flow.RunScript("get_total_supply")	
+	fmt.Println("PRICES")
+	flow.RunScript("get_prices")
 
+	fmt.Println("=================")
 	fmt.Println("ACCOUNT BALANCES")
 	flow.RunScript("get_account_balances", flow.FindAddress("User1"))
-	//fmt.Println("Minting Flow")
-	//flow.FindAddress(FauxFlow)
-	//flow.SendTransactionWithArguments("mint_flow", "User1",)
+
 }

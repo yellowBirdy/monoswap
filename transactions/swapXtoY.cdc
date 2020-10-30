@@ -40,7 +40,6 @@ transaction (amountIn: UFix64) {
 
         MonoswapFTPair.swapXtoY(xTokens: <-xTokens, to: self.yTokensReceiver, minAmountOut: minAmountOut)
 
-
     }
 }
 
