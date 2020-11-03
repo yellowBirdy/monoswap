@@ -6,7 +6,7 @@ export default () => {
         <nav>
             <ul>
                 <li>
-                    <Link to="/">Play</Link>
+                    <Link to="/">Swap</Link>
                 </li>
             </ul>
             <ul>

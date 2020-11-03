@@ -20,11 +20,10 @@ function App() {
       <Nav />
       <header className="App-header">
         <p>
-          You wake up on a makeshift bed at the wall of your bunker with an unesy feeling in your gut.
-          You know... They are coming.
+          Welcome to Monoswap.
         </p>
         <p>
-          Brace yourself. 
+          A DEX on Flow
         </p>
       </header>
       <Switch>
