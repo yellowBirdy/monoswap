@@ -1,20 +1,15 @@
 import * as fcl from "@onflow/fcl";
-import * as sdk from "@onflow/sdk";
 
 import loadCode from "../utils/prepare_cadence_code";
 
 export default async (url, match) => {
   const code = await loadCode(url, match);
-
-  return function (params = []) {
+  return function (args = []) {
     return fcl.send(
       [
-        sdk.script`${code}`,
-        fcl.params(params),      
-      ],
-      {
-        node: "http://localhost:8080"
-      }
-    );
+        fcl.script(code),
+        fcl.args(args)     
+      ]
+    ).then(fcl.decode);
   };
 };
