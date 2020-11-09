@@ -7,7 +7,7 @@ import execute_script_factory from "../execute_script_factory"
 
 
 export default async ({amountIn}) => {
-    const do_get_ids = await execute_script_factory(get_amount_out)
+    const do_get_y_amount_out = await execute_script_factory(get_amount_out)
 
-    return await do_get_ids([fcl.arg(amountIn, t.UFix64)])
+    return await do_get_y_amount_out([fcl.arg(amountIn, t.UFix64)])
 }   
