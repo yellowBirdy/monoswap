@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import {Tab} from 'semantic-ui-react'
 import {getAmountOut, getAmountIn} from '../../../flow/actions'
 import {sanitizeAmount} from '../../../utils'
@@ -24,13 +24,13 @@ const LAST_EDITED_VALS = {
 
 
 //const panes = ({amountIn, setAmountIn, amountOut, setAmountOut, setLastEdited, activeTabIndex})=>{ 
-const panes = ({amountIn, handleAmountInChange, amountOut, handleAmountOutChange})=>{ 
+const panes = ({amountIn, handleAmountInChange, amountOut, handleAmountOutChange, swap})=>{ 
 
     return [
     {   
-        menuItem: `Buy ${OUT_TOKEN_NAME[0]}`,
+        menuItem: `Buy ${OUT_TOKEN_NAME[1]}`,
         render: () =>            
-            <form id="swapbox-form-bitroot" onSubmit={e=>{e.preventDefault(); alert(e.target)}} style={{margin: "auto", width:"50%"}} >
+            <form id="swapbox-form-bitroot" onSubmit={e=>{e.preventDefault(); swap()}} style={{margin: "auto", width:"50%"}} >
                 <label style={{display:"block", width: "90%", margin:"auto", textAlign:"center"}}>Flow amount:
                 <input type="numeric"  style={{display:"block", width:"100%"}}
                         value={amountIn} onChange={e=>handleAmountInChange(e.target.value)}></input>
@@ -42,9 +42,9 @@ const panes = ({amountIn, handleAmountInChange, amountOut, handleAmountOutChange
                 <input type="submit" value="Swap" style={{display:"block", width: "90%", margin:"auto"}} />
             </form>,
     },{
-        menuItem: `Buy ${OUT_TOKEN_NAME[1]}`,
+        menuItem: `Buy ${OUT_TOKEN_NAME[0]}`,
         render: () =>            
-            <form id="swapbox-form-flow" onSubmit={e=>{e.preventDefault(); alert(e.target)}} style={{margin: "auto", width:"50%"}} >
+            <form id="swapbox-form-flow" onSubmit={e=>{e.preventDefault(); swap()}} style={{margin: "auto", width:"50%"}} >
                 <label style={{display:"block", width: "90%", margin:"auto", textAlign:"center"}}>Bitroot amount:
                 <input type="numeric"  style={{display:"block", width:"100%"}}
                         value={amountIn} onChange={e=>handleAmountInChange(e.target.value)} ></input>
@@ -93,17 +93,33 @@ export default ({}) => {
         switch (lastEdited) {
             case LAST_EDITED_VALS.IN:
                 setLastEdited(LAST_EDITED_VALS.OUT)
-                handleAmountOutChange(amountIn)  
                 break
             case LAST_EDITED_VALS.OUT:
                 setLastEdited(LAST_EDITED_VALS.IN)
-                handleAmountInChange(amountOut)
                 break
         }
     }
+    useEffect(()=>{
+        switch (lastEdited) {
+            case LAST_EDITED_VALS.OUT:
+                handleAmountOutChange(amountIn)  
+                break
+            case LAST_EDITED_VALS.IN:
+                handleAmountInChange(amountOut)
+                break
+        }
+    },[activeTabIndex])
+
+    const swap = () => {
+        alert('swapin!')
+        //send swap transaction
+        //fcl.send etc
+        //needs amount in , tokenInName (or both), min amount Out
+        //1. Prepare the transaction action
+    }
     return (
         <Tab 
-            panes={panes({amountIn, handleAmountInChange, amountOut, handleAmountOutChange})} 
+            panes={panes({amountIn, handleAmountInChange, amountOut, handleAmountOutChange, swap})} 
             activeIndex={activeTabIndex}
             onTabChange={handleTabChange}
         />
