@@ -10,7 +10,6 @@ import execute_transaction_factory from "../execute_transaction_factory"
 export default async ({inTokenName, amountIn, minAmountOut}) => {
     const do_xToY = await execute_transaction_factory(xToY)
     const do_yToX = await execute_transaction_factory(yToX)
-
     //TODO: crate args from amountIn, minAmountOut
     //TODO: refactor cadence code to single transaction code paramatrized with inTokenName
     const args = [

@@ -3,7 +3,7 @@ import React, {useState, useEffect} from 'react'
 import {Tab} from 'semantic-ui-react'
 import * as fcl from '@onflow/fcl' //TODO: change current user to a custom effect
 //TODO import swap and get balances 
-import {getAmountOut, getAmountIn, getAccBalances, getPrices} from '../../../flow/actions'
+import {getAmountOut, getAmountIn, getAccBalances, getPrices, swap} from '../../../flow/actions'
 import {sanitizeAmount} from '../../../utils'
 
 const TOKEN_NAMES = [
@@ -11,10 +11,7 @@ const TOKEN_NAMES = [
     "Bitroot"
 ]
 
-const IN_TOKEN_NAME = [
-    "FauxFlow",
-    "Bitroot"
-]
+const IN_TOKEN_NAME = TOKEN_NAMES
 const OUT_TOKEN_NAME = [
     "Bitroot",
     "FauxFlow"
@@ -26,13 +23,13 @@ const LAST_EDITED_VALS = {
 
 
 
-const panes = ({amountIn, handleAmountInChange, amountOut, handleAmountOutChange, balanceIn, balanceOut,price0, price1, swap})=>{ 
+const panes = ({amountIn, handleAmountInChange, amountOut, handleAmountOutChange, balanceIn, balanceOut,price0, price1, doSwap})=>{ 
 
     return [
     {   
         menuItem: `Buy ${OUT_TOKEN_NAME[1]}`,
         render: () =>            
-            <form id="swapbox-form-bitroot" onSubmit={e=>{e.preventDefault(); swap()}} style={{margin: "auto", width:"50%"}} >
+            <form id="swapbox-form-bitroot" onSubmit={e=>{e.preventDefault(); doSwap()}} style={{margin: "auto", width:"50%"}} >
                 <label style={{display:"block", width: "90%", margin:"auto", textAlign:"center"}}>Flow amount:
                 <input type="numeric"  style={{display:"block", width:"100%"}}
                         value={amountIn} onChange={e=>handleAmountInChange(e.target.value)}></input>
@@ -49,7 +46,7 @@ const panes = ({amountIn, handleAmountInChange, amountOut, handleAmountOutChange
     },{
         menuItem: `Buy ${OUT_TOKEN_NAME[0]}`,
         render: () =>            
-            <form id="swapbox-form-flow" onSubmit={e=>{e.preventDefault(); swap()}} style={{margin: "auto", width:"50%"}} >
+            <form id="swapbox-form-flow" onSubmit={e=>{e.preventDefault(); doSwap()}} style={{margin: "auto", width:"50%"}} >
                 <label style={{display:"block", width: "90%", margin:"auto", textAlign:"center"}}>Bitroot amount:
                 <input type="numeric"  style={{display:"block", width:"100%"}}
                         value={amountIn} onChange={e=>handleAmountInChange(e.target.value)} ></input>
@@ -80,6 +77,7 @@ export default ({}) => {
     const [activeTabIndex, setActiveTabIndex] = useState(0)
     const [maxSlippage, setMaxSlippage] = useState(0.1)
     const [minAmountOut, setMinAmountOut] = useState(null)
+    const [swapUnderway, setSwapUnderway] = useState(false)
 
     const handleAmountInChange = async (amountIn) => {
         if (Number.isNaN(Number(amountIn))) return  // if emtpy 
@@ -115,6 +113,10 @@ export default ({}) => {
                 break
         }
     }
+
+    const getInTokenName = () => IN_TOKEN_NAME[activeTabIndex]
+
+   
 
     useEffect(()=>{
         fcl.currentUser()
@@ -153,19 +155,25 @@ export default ({}) => {
         }
     },[activeTabIndex])
 
-    const swap = () => {
-        alert('swapin!')
+    const doSwap = async () => {
+        //checking for too much slippage  //TODO: computeSlippage function, requires indexable prices 
+        let slippage = 0.0000
+        if ( slippage > maxSlippage) return alert("Too little liquidity, consider swapping less or adjusting slippage tolerance")
         //send swap transaction
-        //fcl.send etc
-        //needs amount in , tokenInName (or both), min amount Out
-        //1. Prepare the transaction action
+        let inTokenName = getInTokenName() 
+        let minAmountOut = String((amountIn*price1 * (1-maxSlippage)).toFixed(3))
+
+        setSwapUnderway(true)
+        console.log(swap({inTokenName, amountIn, minAmountOut}))
+        setSwapUnderway(false)
     }
     return (
         <div>
             <p>Hello {currentUser && currentUser.addr}</p>
+            {swapUnderway && <h1>AWAITING CONFIRMATION</h1>}
             <Tab 
                 panes={panes({amountIn, handleAmountInChange, amountOut, handleAmountOutChange, balanceIn, balanceOut,
-                    price0, price1, swap})} 
+                    price0, price1, doSwap})} 
                 activeIndex={activeTabIndex}
                 onTabChange={handleTabChange}
             />

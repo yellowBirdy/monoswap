@@ -19,7 +19,7 @@ func ufix(input string) cadence.UFix64 {
 func main() {
 	flow := tooling.NewFlowConfigLocalhost()
 
-	fmt.Println("Adding Liquidity")
+	fmt.Println("Swapping")
 	flow.SendTransactionWithArguments("swapXtoY", "User1", ufix("100.0"))
 
 }
