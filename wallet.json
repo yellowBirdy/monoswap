@@ -26,7 +26,7 @@
 		},
 		"User2": {
 			"address": "045a1763c93006ca",
-			"privateKey": "e7f9570df229c1ecce8d8f590d4a5a07203107e292cc07063b792511a958f6bb",
+			"privateKey": "7ebca47e4b5e384127685d45cfda96ec1b4202afc442d691918213a7be3f7379",
 			"sigAlgorithm": "ECDSA_P256",
 			"hashAlgorithm": "SHA3_256"
 		},

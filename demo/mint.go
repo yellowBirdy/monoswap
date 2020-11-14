@@ -23,8 +23,8 @@ func main() {
 	flow := tooling.NewFlowConfigLocalhost()
 
 	fmt.Println("Minting Flow")
-	flow.SendTransactionWithArguments("mint_flow", FauxFlow, flow.FindAddress("User1"))
+	flow.SendTransactionWithArguments("mint_flow", FauxFlow, flow.FindAddress("User2"))
 
 	fmt.Println("Minting Bitroot")
-	flow.SendTransactionWithArguments("mint_bitroot", Bitroot, flow.FindAddress("User1"))
+	flow.SendTransactionWithArguments("mint_bitroot", Bitroot, flow.FindAddress("User2"))
 }

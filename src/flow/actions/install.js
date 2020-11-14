@@ -11,7 +11,7 @@ export default async () => {
 
     fcl.tx(installTx).subscribe(txStatus => {
         if (fcl.tx.isExecuted(txStatus)) {
-            console.log(`SurvivalNFT has been installed for current account.`)
+            console.log(`Monoswap Demo dependencies hav been installed for current account.`)
         }
     })
 }  
