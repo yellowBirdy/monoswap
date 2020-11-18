@@ -1,11 +1,11 @@
 import React, {useState, useEffect} from 'react'
-import styled from 'styled-components'
-//import {Tab} from 'semantic-ui-react'
-import * as fcl from '@onflow/fcl' //TODO: change current user to a custom effect
+//import styled from 'styled-components'
+import * as fcl from '@onflow/fcl' 
 
 import {getAmountOut, getAmountIn, getAccBalances, getPrices, swap} from '../../../flow/actions'
 import {sanitizeAmount} from '../../../utils'
 import {Downarrow} from '../../../assets'
+import {Balance}  from "../../../components/subcomponents"
 
 const TOKEN_NAMES = [
     "FauxFlow",
@@ -21,11 +21,6 @@ const LAST_EDITED_VALS = {
     IN: "IN",
     OUT: "OUT"
 }
-const Balance = styled.p`
-    font-size: 0.9em;
-    font-family: monospace sans-serif;
-    color: ${props=>props.low ? "red" : "lightblue"}
-`
 
 
 export default ({}) => {
@@ -38,7 +33,6 @@ export default ({}) => {
     const [lastEdited, setLastEdited] = useState(null)
     const [inTokenIdx, setInTokenIdx] = useState(0)
     const [maxSlippage, setMaxSlippage] = useState(0.1)
-    //const [minAmountOut, setMinAmountOut] = useState(null)
     const [swapUnderway, setSwapUnderway] = useState(false)
 
     const outTokenIdx = ()=>(inTokenIdx+1)%2
@@ -49,7 +43,7 @@ export default ({}) => {
         amountIn = sanitizeAmount(amountIn)
 
         setAmountIn(amountIn)
-        let inTokenName = IN_TOKEN_NAME[/*activeTabIndex*/inTokenIdx]
+        let inTokenName = IN_TOKEN_NAME[inTokenIdx]
         setAmountOut(await getAmountOut({amountIn, inTokenName}))
         setLastEdited(LAST_EDITED_VALS.IN)
     }
@@ -58,12 +52,16 @@ export default ({}) => {
         
         amountOut = sanitizeAmount(amountOut)
         setAmountOut(amountOut)
-        let inTokenName = IN_TOKEN_NAME[/*activeTabIndex*/inTokenIdx]
+        let inTokenName = IN_TOKEN_NAME[inTokenIdx]
         setAmountIn(await getAmountIn({amountOut, inTokenName}))
         setLastEdited(LAST_EDITED_VALS.OUT)
     }
 
-    const getInTokenName = () => IN_TOKEN_NAME[/*activeTabIndex*/inTokenIdx]
+    const getInTokenName = () => TOKEN_NAMES[inTokenIdx]
+    const getOutTokenName = () => TOKEN_NAMES[outTokenIdx()]
+    const getInBalance  = () => balances[inTokenIdx]
+    const getOutBalance = () => balances[outTokenIdx()]
+
 
    
     // fetch 
@@ -139,14 +137,15 @@ export default ({}) => {
                 <input type="numeric"  style={{display:"block", width:"100%"}}
                         value={amountIn} onChange={e=>handleAmountInChange(e.target.value)}></input>
                 </label>
-                <Balance>{TOKEN_NAMES[inTokenIdx]} Balance: {balances[inTokenIdx]}</Balance>
+                <Balance name={getInTokenName()} amount={getOutBalance()} />
                 <Downarrow onClick={handleDirectionChange} />
                 <label style={{display:"block", width: "90%", margin:"auto", textAlign:"center"}}>{TOKEN_NAMES[outTokenIdx()]} amount:
                 <input type="numeric"  style={{display:"block", width:"100%"}}
                     value={amountOut} onChange={e=>handleAmountOutChange(e.target.value)}></input>
                 </label>
                 <input type="submit" value="Swap" style={{display:"block", width: "90%", margin:"auto"}} />
-                <Balance>{TOKEN_NAMES[outTokenIdx()]} Balance: {balances[outTokenIdx()]}</Balance>
+                <Balance name={getOutTokenName()} amount={getOutBalance()} />
+
                 <p style={{fontSize: "1.1em", fontFamily:"monospace", color: "teal"}}> Price: {prices[outTokenIdx()]}</p>
             </form>
             {inTokenIdx === 0 ?
