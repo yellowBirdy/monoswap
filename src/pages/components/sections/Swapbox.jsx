@@ -137,7 +137,7 @@ export default ({}) => {
                 <input type="numeric"  style={{display:"block", width:"100%"}}
                         value={amountIn} onChange={e=>handleAmountInChange(e.target.value)}></input>
                 </label>
-                <Balance name={getInTokenName()} amount={getOutBalance()} />
+                <Balance name={getInTokenName()} amount={getInBalance()} />
                 <Downarrow onClick={handleDirectionChange} />
                 <label style={{display:"block", width: "90%", margin:"auto", textAlign:"center"}}>{TOKEN_NAMES[outTokenIdx()]} amount:
                 <input type="numeric"  style={{display:"block", width:"100%"}}
