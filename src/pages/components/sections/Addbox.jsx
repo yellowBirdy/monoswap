@@ -33,14 +33,14 @@ export default () => {
         amount0 = sanitizeAmount(amount0)
     
         setAmount0(amount0)
-        setAmount1(String(amount0 * prices[0]))  //cast to string so both are string, as UFix64 deprecates numerical input
+        setAmount1(sanitizeAmount(String(amount0 * prices[0])))  //cast to string so both are string, as UFix64 deprecates numerical input
     }
     const handleAmount1Change = async (amount1) => {
         if (Number.isNaN(Number(amount1))) return  // if emtpy 
         
         amount1 = sanitizeAmount(amount1)
         setAmount1(amount1)
-        setAmount0(String(amount1 * prices[1]))  //cast to string so both are string, as UFix64 deprecates numerical input
+        setAmount0(sanitizeAmount(String(amount1 * prices[1])))  //cast to string so both are string, as UFix64 deprecates numerical input
     }
 
     const doAdd = async () => {

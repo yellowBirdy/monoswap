@@ -158,8 +158,8 @@ pub contract MonoswapFTPair: FungibleToken {
         //}
         var liquidity_amount =  UFix64(0);
         if (self.totalSupply > 0.0) {
-            assert((Fix64(xTokens.balance / yTokens.balance) - Fix64(self.getXPrice())) < Fix64(0.01), message: "Wrong ratio")
-            assert((Fix64(xTokens.balance / yTokens.balance) - Fix64(self.getXPrice())) > Fix64(-0.01), message: "Wrong ratio")
+            assert((Fix64(xTokens.balance / yTokens.balance) - Fix64(self.getXPrice())) < Fix64(0.05), message: "Wrong ratio")
+            assert((Fix64(xTokens.balance / yTokens.balance) - Fix64(self.getXPrice())) > Fix64(-0.05), message: "Wrong ratio")
             // just deposits all the tokens into reserves but mints lTokens corresponding the current reserves ratio
             //TODO: below should be min instead of mean to be more precise, but cos of the assertions above should be fine
             let deposit_to_reserve_ratio = (xTokens.balance / self.xReserve.balance + yTokens.balance / self.yReserve.balance) / 2.0  
