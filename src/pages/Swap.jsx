@@ -1,14 +1,15 @@
-import React, {useState} from "react"
-import { Tab } from "semantic-ui-react"
+import React from "react"
 
-import {Swapbox} from "./components/sections"
+import {Swapbox, Addbox} from "./components/sections"
 
 
 
 export default () => {
    
     return (
-        
+        <div>
             <Swapbox />
+            <Addbox />
+        </div>
     )
 }

@@ -1,16 +1,13 @@
 import React, {useState, useEffect} from 'react'
-//import styled from 'styled-components'
-import * as fcl from '@onflow/fcl' 
 
-import {getAmountOut, getAmountIn, getAccBalances, getPrices, swap} from '../../../flow/actions'
+import {TOKEN_NAMES} from "../../../config"
+import {getAmountOut, getAmountIn, swap} from '../../../flow/actions'
+import {useCurrentUser, usePrices, useBalances} from "../../../hooks"
 import {sanitizeAmount} from '../../../utils'
 import {Downarrow} from '../../../assets'
 import {Balance}  from "../../../components/subcomponents"
 
-const TOKEN_NAMES = [
-    "FauxFlow",
-    "Bitroot"
-]
+
 
 const IN_TOKEN_NAME = TOKEN_NAMES
 const OUT_TOKEN_NAME = [
@@ -27,13 +24,14 @@ export default ({}) => {
 
     const [amountIn, setAmountIn]   = useState(0)
     const [amountOut, setAmountOut] = useState(0)
-    const [balances, setBalances] = useState([null, null])
-    const [prices, setPrices] = useState([null, null])
-    const [currentUser, setCurrentUser] = useState(null)
     const [lastEdited, setLastEdited] = useState(null)
     const [inTokenIdx, setInTokenIdx] = useState(0)
     const [maxSlippage, setMaxSlippage] = useState(0.1)
     const [swapUnderway, setSwapUnderway] = useState(false)
+
+    const currentUser = useCurrentUser()
+    const prices      = usePrices([amountIn]) //changing amountOut triggers change in amoutIn as well 
+    const balances    = useBalances([amountIn, currentUser])
 
     const outTokenIdx = ()=>(inTokenIdx+1)%2
 
@@ -61,34 +59,6 @@ export default ({}) => {
     const getOutTokenName = () => TOKEN_NAMES[outTokenIdx()]
     const getInBalance  = () => balances[inTokenIdx]
     const getOutBalance = () => balances[outTokenIdx()]
-
-
-   
-    // fetch 
-    useEffect(()=>{
-        fcl.currentUser()
-            .subscribe(user=>setCurrentUser({...user}))
-        
-        const updPrices = async ()=>{
-            let prices = await getPrices()
-            setPrices([prices[TOKEN_NAMES[0]], prices[TOKEN_NAMES[1]]])
-        }
-        updPrices()
-
-    }, [amountIn])
-
-    // fetch token balances
-    useEffect( ()=>{
-        if (!currentUser) return
-        const updBalances = async () => {
-            let balances = await getAccBalances({address: currentUser.addr})
-            setBalances([balances[TOKEN_NAMES[0]], balances[TOKEN_NAMES[1]]])
-        }
-        updBalances()
-    }, [currentUser, amountIn])
-
-
-
     
     useEffect(()=>{
         switch (lastEdited) {

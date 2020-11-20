@@ -9,4 +9,6 @@ export { default as getAmountOut } from "./getAmountOut"
 export { default as getPrices } from "./getPrices"  
 
 export { default as swap } from "./swap"
+export { default as addLiquidity } from "./addLiquidity"
+
 
