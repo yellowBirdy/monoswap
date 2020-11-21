@@ -26,7 +26,7 @@ func main() {
 	// fmt.Scanln()
 	//flow.CreateAccount("User1")
 	//flow.FindAddress("User1")
-	flow.SendTransactionWithArguments("install_all", "User2")
+	flow.SendTransactionWithArguments("install_all", "User3")
 
 	//fmt.Println("Minting Flow")
 	//flow.FindAddress(FauxFlow)
