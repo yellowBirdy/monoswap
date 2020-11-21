@@ -10,5 +10,7 @@ export { default as getPrices } from "./getPrices"
 
 export { default as swap } from "./swap"
 export { default as addLiquidity } from "./addLiquidity"
+export { default as removeLiquidity } from "./removeLiquidity"
+
 
 

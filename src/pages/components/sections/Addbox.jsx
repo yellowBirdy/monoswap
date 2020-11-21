@@ -67,8 +67,9 @@ export default () => {
                 <input type="numeric"  style={{display:"block", width:"100%"}}
                     value={amount1} onChange={e=>handleAmount1Change(e.target.value)}></input>
                 </label>
-                <input type="submit" value="Add Liquidity" style={{display:"block", width: "90%", margin:"auto"}} />
                 <Balance name={TOKEN_NAMES[1]} amount={balances[1]} />
+
+                <input type="submit" value="Add Liquidity" style={{display:"block", width: "90%", margin:"auto"}} />
 
                 <p style={{fontWeight: "bold"}}>0 to 1 ratio: {ratio && ratio.toFixed(3)}</p>
 

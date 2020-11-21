@@ -1,6 +1,6 @@
 import React from "react"
 
-import {Swapbox, Addbox} from "./components/sections"
+import {Swapbox, Addbox, Removebox} from "./components/sections"
 
 
 
@@ -10,6 +10,7 @@ export default () => {
         <div>
             <Swapbox />
             <Addbox />
+            <Removebox />
         </div>
     )
 }
