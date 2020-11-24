@@ -5,7 +5,7 @@ import { install } from "../flow/actions"
 export default () => {
     return (
         <div>
-            <button onClick={install}>Install</button>
+            <button onClick={install}>Install Vaults</button>
         </div>
     )
 }
