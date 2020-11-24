@@ -15,7 +15,9 @@ transaction {
 
         if signer.borrow<&Bitroot.Vault>(from: /storage/BitrootVault) == nil {
             // Create a new Bitroot Vault and put it in storage
-            signer.save(<-Bitroot.createEmptyVault(), to: /storage/BitrootVault)
+            //signer.save(<-Bitroot.createEmptyVault(), to: /storage/BitrootVault)
+            signer.save(<-Bitroot.createPromoVault(), to: /storage/BitrootVault)
+
 
             // Create a public capability to the Vault that only exposes
             // the deposit function through the Receiver interface
@@ -34,7 +36,8 @@ transaction {
 
         if signer.borrow<&FauxFlow.Vault>(from: /storage/FauxFlowVault) == nil {
             // Create a new FauxFlow Vault and put it in storage
-            signer.save(<-FauxFlow.createEmptyVault(), to: /storage/FauxFlowVault)
+            //signer.save(<-FauxFlow.createEmptyVault(), to: /storage/FauxFlowVault)
+            signer.save(<-FauxFlow.createPromoVault(), to: /storage/FauxFlowVault)
 
             // Create a public capability to the Vault that only exposes
             // the deposit function through the Receiver interface
