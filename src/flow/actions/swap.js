@@ -1,8 +1,8 @@
 import * as fcl from "@onflow/fcl"
 import * as t from "@onflow/types"
 
-import xToY from "../../cadence/transactions/swapXtoY.cdc"
-import yToX from "../../cadence/transactions/swapYtoX.cdc"
+import xToY from "../cadence/transactions/swapXtoY.cdc"
+import yToX from "../cadence/transactions/swapYtoX.cdc"
 
 import execute_transaction_factory from "../execute_transaction_factory"
 

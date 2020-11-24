@@ -1,5 +1,5 @@
 import React from "react"
-import { install } from "../../../flow/actions"
+import { install } from "../flow/actions"
 //TODO: use state to keep track of tx result and show result
 
 export default () => {

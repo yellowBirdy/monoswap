@@ -1,6 +1,6 @@
 import React from "react"
 
-import {Install, Mint} from "./components/sections"
+import {Install, Mint} from "../widgets"
 
 
 

@@ -1,19 +1,16 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState, useEffect} from "react"
 
-import {TOKEN_NAMES} from "../../../config"
-import {getAmountOut, getAmountIn, swap} from '../../../flow/actions'
-import {useCurrentUser, usePrices, useBalances} from "../../../hooks"
-import {sanitizeAmount} from '../../../utils'
-import {Downarrow} from '../../../assets'
-import {Balance}  from "../../../components/subcomponents"
+import {TOKEN_NAMES} from "../config"
+import {getAmountOut, getAmountIn, swap} from "../flow/actions"
+import {useCurrentUser, usePrices, useBalances} from "../hooks"
+import {sanitizeAmount} from "../utils"
+import {Downarrow} from "../visual"
+import {Balance}  from "../components/subcomponents"
 
 
 
 const IN_TOKEN_NAME = TOKEN_NAMES
-const OUT_TOKEN_NAME = [
-    "Bitroot",
-    "FauxFlow"
-]
+
 const LAST_EDITED_VALS = {
     IN: "IN",
     OUT: "OUT"

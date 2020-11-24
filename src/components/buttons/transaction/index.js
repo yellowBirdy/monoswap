@@ -1,6 +1,2 @@
-export {default as DeployStandard} from "./DeployStandard"
-export {default as DeployNFT} from "./DeployNFT"
 export {default as Mint} from "./Mint"
-export {default as SeedContract} from "./SeedContract.jsx"
 export {default as Install} from "./Install.jsx"
-export {default as MintCombination} from "./MintCombination.jsx"

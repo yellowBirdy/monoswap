@@ -1,8 +1,8 @@
 import * as fcl from "@onflow/fcl"
 import * as t from "@onflow/types"
 
-//import get_amount_out from "../../cadence/scripts/get_y_amount_out.cdc";
-import get_amount_out from "../../cadence/scripts/get_amount_out.cdc";
+//import get_amount_out from "../cadence/scripts/get_y_amount_out.cdc";
+import get_amount_out from "../cadence/scripts/get_amount_out.cdc";
 import execute_script_factory from "../execute_script_factory"
 
 

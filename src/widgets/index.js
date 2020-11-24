@@ -4,5 +4,6 @@ export {default as Removebox} from "./Removebox.jsx"
 
 export {default as Install} from "./Install.jsx"
 export {default as Mint} from "./Mint.jsx"
+export {default as Nav} from "./Nav.jsx"
 
 

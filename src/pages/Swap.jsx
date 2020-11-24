@@ -1,6 +1,6 @@
 import React from "react"
 
-import {Swapbox, Addbox, Removebox} from "./components/sections"
+import {Swapbox, Addbox, Removebox} from "../widgets"
 
 
 

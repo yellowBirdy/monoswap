@@ -1,5 +1,5 @@
 
-import get_prices from "../../cadence/scripts/get_prices.cdc";
+import get_prices from "../cadence/scripts/get_prices.cdc";
 import execute_script_factory from "../execute_script_factory"
 
 

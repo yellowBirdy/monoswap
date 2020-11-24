@@ -1,6 +1,8 @@
 import React from "react"
 
-import {User, Flowscan, Pool} from "../components/sections"
+import User from "./User.jsx"
+import Flowscan from "./Flowscan.jsx"
+import Pool from "./Pool.jsx"
 
 export default () => {
     return (       

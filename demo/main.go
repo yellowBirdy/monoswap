@@ -24,7 +24,7 @@ func main() {
 	flow := tooling.NewFlowConfigLocalhost()
 
 	fmt.Println("Deploy contracts - press ENTER")
-	fmt.Scanln()
+	//fmt.Scanln()
 	flow.DeployContract(Bitroot)
 	flow.DeployContract(FauxFlow)
 	flow.DeployContract(Exchange)

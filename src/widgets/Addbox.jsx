@@ -1,13 +1,13 @@
 import React, {useState, useEffect} from "react"
 
-import {Balance} from "../../../components/subcomponents"
-import {TOKEN_NAMES, LP_TOKEN_NAME} from "../../../config"
+import {Balance} from "../components/subcomponents"
+import {TOKEN_NAMES, LP_TOKEN_NAME} from "../config"
 
-import {sanitizeAmount} from '../../../utils'
+import {sanitizeAmount} from "../utils"
 
-import {useCurrentUser, usePrices, useBalances} from "../../../hooks"
+import {useCurrentUser, usePrices, useBalances} from "../hooks"
 
-import {addLiquidity} from "../../../flow/actions"
+import {addLiquidity} from "../flow/actions"
 
 
 

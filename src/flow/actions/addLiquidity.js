@@ -1,7 +1,7 @@
 import * as fcl from "@onflow/fcl"
 import * as t from "@onflow/types"
 
-import add_liquidity from "../../cadence/transactions/add_liquidity.cdc"
+import add_liquidity from "../cadence/transactions/add_liquidity.cdc"
 
 import execute_transaction_factory from "../execute_transaction_factory"
 

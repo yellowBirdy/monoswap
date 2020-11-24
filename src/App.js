@@ -6,7 +6,7 @@ import {
 } from "react-router-dom"
 
 
-import {Nav} from "./components/subcomponents"
+import {Nav} from "./widgets"
 import {Sandbox, Swap, Faucet} from "./pages"
 
 import 'semantic-ui-css/semantic.min.css'
