@@ -1,4 +1,3 @@
-export { default as mint } from "../admin_actions/mint"
 export { default as install } from "./install"      
 export { default as getAccData } from "./getAccData"      
 export { default as getLatestBlock } from "./getLatestBlock"      

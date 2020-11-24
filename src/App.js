@@ -7,7 +7,7 @@ import {
 
 
 import {Nav} from "./components/subcomponents"
-import {Sandbox, Swap} from "./pages"
+import {Sandbox, Swap, Faucet} from "./pages"
 
 import 'semantic-ui-css/semantic.min.css'
 import './App.css';
@@ -30,6 +30,10 @@ function App() {
         <Route path="/sandbox">
           <Sandbox />
         </Route> 
+        <Route path="/faucet">
+          <Faucet />
+        </Route> 
+        
         <Route path="/">
           <Swap />
         </Route>

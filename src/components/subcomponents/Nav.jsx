@@ -8,13 +8,11 @@ export default () => {
                 <li>
                     <Link to="/">Swap</Link>
                 </li>
-            </ul>
-            <ul>
+          {/*
                 <li>
-                    <Link to="/admin">Admin</Link>
+                    <Link to="/faucet">Faucet</Link>
                 </li>
-            </ul>
-            <ul>
+            */}
                 <li>
                     <Link to="/sandbox">Sandbox</Link>
                 </li>
