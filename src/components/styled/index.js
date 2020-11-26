@@ -1,1 +1,6 @@
 export {default as Quantinfo} from "./Quantinfo"
+export {default as Form} from "./Form"
+export {default as Label} from "./Label"
+export {default as Input} from "./Input"
+export {default as P} from "./P"
+export {default as Bordered} from "./Bordered"

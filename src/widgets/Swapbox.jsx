@@ -6,6 +6,7 @@ import {useCurrentUser, usePrices, useBalances} from "../hooks"
 import {sanitizeAmount} from "../utils"
 import {Downarrow} from "../visual"
 import {Balance}  from "../components/subcomponents"
+import {Form, Label, Input, P, Bordered }  from "../components/styled"
 
 
 
@@ -97,36 +98,35 @@ export default ({}) => {
 
     return (
         <div>
-            <p>Hello {currentUser && currentUser.addr}</p>
+            <P>Hello {currentUser && currentUser.addr}</P>
             {swapUnderway && <h1>AWAITING CONFIRMATION</h1>}
-            <form id="swapbox-form-bitroot" onSubmit={e=>{e.preventDefault(); doSwap()}} style={{margin: "auto", width:"50%"}} >
-                <label style={{display:"block", width: "90%", margin:"auto", textAlign:"center"}}>{TOKEN_NAMES[inTokenIdx]} amount:
-                <input type="numeric"  style={{display:"block", width:"100%"}}
-                        value={amountIn} onChange={e=>handleAmountInChange(e.target.value)}></input>
-                </label>
+            <Form id="swapbox-form-bitroot" onSubmit={e=>{e.preventDefault(); doSwap()}} >
+                <Label>{TOKEN_NAMES[inTokenIdx]} amount:
+                <Input type="numeric"  
+                        value={amountIn} onChange={e=>handleAmountInChange(e.target.value)}></Input>
+                </Label>
                 <Balance name={getInTokenName()} amount={getInBalance()} />
                 <Downarrow onClick={handleDirectionChange} />
-                <label style={{display:"block", width: "90%", margin:"auto", textAlign:"center"}}>{TOKEN_NAMES[outTokenIdx()]} amount:
-                <input type="numeric"  style={{display:"block", width:"100%"}}
-                    value={amountOut} onChange={e=>handleAmountOutChange(e.target.value)}></input>
-                </label>
-                <input type="submit" value="Swap" style={{display:"block", width: "90%", margin:"auto"}} />
+                <Label >{TOKEN_NAMES[outTokenIdx()]} amount:
+                <Input type="numeric" value={amountOut} onChange={e=>handleAmountOutChange(e.target.value)}></Input>
+                </Label>
+                <Label><Input type="submit" value="Swap"/></Label>
                 <Balance name={getOutTokenName()} amount={getOutBalance()} />
 
-                <p style={{fontSize: "1.1em", fontFamily:"monospace", color: "teal"}}> Price: {prices[outTokenIdx()]}</p>
-            </form>
-            {inTokenIdx === 0 ?
-            <div>
-                <p style={{fontSize: "0.9em", fontFamily:"monospace", color: "lightred"}}>Min Amount Out: {amountIn*prices[1] * (1-maxSlippage)}</p>
-                <p style={{fontSize: "0.9em", fontFamily:"monospace", color: "black"}}>Slippage: {((prices[1]*amountIn - amountOut)/(prices[1]*amountIn)).toFixed(3)}</p>
-                <p style={{fontSize: "0.9em", fontFamily:"monospace", color: "black"}}>Max Slippage: {maxSlippage}</p>
-            </div> :
-            <div>
-                <p style={{fontSize: "0.9em", fontFamily:"monospace", color: "lightred"}}>Min Amount Out: {amountIn*prices[0] * (1-maxSlippage)}</p>
-                <p style={{fontSize: "0.9em", fontFamily:"monospace", color: "black"}}>Slippage: {((prices[0]*amountIn - amountOut)/(prices[0]*amountIn)).toFixed(3)}</p>
-                <p style={{fontSize: "0.9em", fontFamily:"monospace", color: "black"}}>Max Slippage: {maxSlippage}</p>
-            </div>
-            }
+                <P style={{fontSize: "1.1em", fontFamily:"monospace", color: "teal"}}> Price: {prices[outTokenIdx()]}</P>
+                {inTokenIdx === 0 ?
+                <Bordered>
+                    <P style={{fontSize: "0.9em", fontFamily:"monospace", color: "lightred"}}>Min Amount Out: {amountIn*prices[1] * (1-maxSlippage)}</P>
+                    <P style={{fontSize: "0.9em", fontFamily:"monospace", color: "black"}}>Slippage: {((prices[1]*amountIn - amountOut)/(prices[1]*amountIn)).toFixed(3)}</P>
+                    <P style={{fontSize: "0.9em", fontFamily:"monospace", color: "black"}}>Max Slippage: {maxSlippage}</P>
+                </Bordered> :
+                <Bordered>
+                    <P style={{fontSize: "0.9em", fontFamily:"monospace", color: "lightred"}}>Min Amount Out: {amountIn*prices[0] * (1-maxSlippage)}</P>
+                    <P style={{fontSize: "0.9em", fontFamily:"monospace", color: "black"}}>Slippage: {((prices[0]*amountIn - amountOut)/(prices[0]*amountIn)).toFixed(3)}</P>
+                    <P style={{fontSize: "0.9em", fontFamily:"monospace", color: "black"}}>Max Slippage: {maxSlippage}</P>
+                </Bordered>
+                }
+            </Form>
 
         </div>
     )

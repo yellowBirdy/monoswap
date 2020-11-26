@@ -9,6 +9,8 @@ import {useCurrentUser, usePrices, useBalances} from "../hooks"
 
 import {removeLiquidity} from "../flow/actions"
 
+import {Form}  from "../components/styled"
+
 
 
 export default () => {
@@ -40,7 +42,7 @@ export default () => {
             <Balance name={`${TOKEN_NAMES[0]}-${TOKEN_NAMES[1]}_LP`} amount={balances[LP_TOKEN_NAME]} />
 
             {actionUnderway && <h3>AWAITING CONFIRMATION</h3>}
-            <form id="withdraw_liquiditybox-form" onSubmit={e=>{e.preventDefault(); doRemove()}} style={{margin: "auto", width:"50%"}} >
+            <Form id="withdraw_liquiditybox-form" onSubmit={e=>{e.preventDefault(); doRemove()}} >
                 <label style={{display:"block", width: "90%", margin:"auto", textAlign:"center"}}>{LP_TOKEN_NAME} amount:
                 <input type="numeric"  style={{display:"block", width:"100%"}}
                         value={amount} onChange={e=>setAmount(sanitizeAmount(e.target.value))}></input>
@@ -50,9 +52,10 @@ export default () => {
                 <input type="submit" value="Remove Liquidity" style={{display:"block", width: "90%", margin:"auto"}} />
 
                 <p style={{fontWeight: "bold"}}>0 to 1 ratio: {ratio && ratio.toFixed(3)}</p>
-
-            </form>
-            <p style={{fontSize: "0.9em", fontFamily:"monospace", color: "lightred"}}>LP amount out: {/*lpAmountOut*/}</p>
+                <div>
+                    <p style={{fontSize: "0.9em", fontFamily:"monospace", color: "lightred"}}>LP amount out: {/*lpAmountOut*/}</p>
+                </div>
+            </Form>
 
 
         </div>

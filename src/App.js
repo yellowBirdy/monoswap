@@ -33,7 +33,6 @@ function App() {
         <Route path="/faucet">
           <Faucet />
         </Route> 
-        
         <Route path="/">
           <Swap />
         </Route>
