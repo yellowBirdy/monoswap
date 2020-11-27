@@ -4,6 +4,7 @@ import {
   Switch,
   Route
 } from "react-router-dom"
+import {ThemeProvider} from "styled-components"
 
 
 import {Nav} from "./widgets"

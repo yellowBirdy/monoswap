@@ -9,7 +9,7 @@ import {useCurrentUser, usePrices, useBalances} from "../hooks"
 
 import {removeLiquidity} from "../flow/actions"
 
-import {Form}  from "../components/styled"
+import {Form, P, Container}  from "../components/styled"
 
 
 
@@ -43,6 +43,7 @@ export default () => {
 
             {actionUnderway && <h3>AWAITING CONFIRMATION</h3>}
             <Form id="withdraw_liquiditybox-form" onSubmit={e=>{e.preventDefault(); doRemove()}} >
+            <Container chubby>
                 <label style={{display:"block", width: "90%", margin:"auto", textAlign:"center"}}>{LP_TOKEN_NAME} amount:
                 <input type="numeric"  style={{display:"block", width:"100%"}}
                         value={amount} onChange={e=>setAmount(sanitizeAmount(e.target.value))}></input>
@@ -51,10 +52,11 @@ export default () => {
                 
                 <input type="submit" value="Remove Liquidity" style={{display:"block", width: "90%", margin:"auto"}} />
 
-                <p style={{fontWeight: "bold"}}>0 to 1 ratio: {ratio && ratio.toFixed(3)}</p>
-                <div>
-                    <p style={{fontSize: "0.9em", fontFamily:"monospace", color: "lightred"}}>LP amount out: {/*lpAmountOut*/}</p>
-                </div>
+                <P style={{fontWeight: "bold"}}>0 to 1 ratio: {ratio && ratio.toFixed(3)}</P>
+            </Container>
+            <Container secondary formElement>
+                <P style={{fontSize: "0.9em", fontFamily:"monospace", color: "lightred"}}>LP amount out: {/*lpAmountOut*/}</P>
+            </Container>
             </Form>
 
 

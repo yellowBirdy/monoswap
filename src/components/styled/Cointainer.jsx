@@ -1,6 +1,6 @@
 import styled from "styled-components"
-import {bordered} from "./commonStyles"
+import defaults from "./commonStyles"
 
 export default styled.div`
-    ${bordered}
-`
+    ${defaults}
+` 

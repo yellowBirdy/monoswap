@@ -6,7 +6,7 @@ import {useCurrentUser, usePrices, useBalances} from "../hooks"
 import {sanitizeAmount} from "../utils"
 import {Downarrow} from "../visual"
 import {Balance}  from "../components/subcomponents"
-import {Form, Label, Input, P, Bordered }  from "../components/styled"
+import {Form, Label, Input, P, Container }  from "../components/styled"
 
 
 
@@ -101,30 +101,32 @@ export default ({}) => {
             <P>Hello {currentUser && currentUser.addr}</P>
             {swapUnderway && <h1>AWAITING CONFIRMATION</h1>}
             <Form id="swapbox-form-bitroot" onSubmit={e=>{e.preventDefault(); doSwap()}} >
-                <Label>{TOKEN_NAMES[inTokenIdx]} amount:
-                <Input type="numeric"  
-                        value={amountIn} onChange={e=>handleAmountInChange(e.target.value)}></Input>
-                </Label>
-                <Balance name={getInTokenName()} amount={getInBalance()} />
-                <Downarrow onClick={handleDirectionChange} />
-                <Label >{TOKEN_NAMES[outTokenIdx()]} amount:
-                <Input type="numeric" value={amountOut} onChange={e=>handleAmountOutChange(e.target.value)}></Input>
-                </Label>
-                <Label><Input type="submit" value="Swap"/></Label>
-                <Balance name={getOutTokenName()} amount={getOutBalance()} />
+                <Container chubby>
+                    <Label>{TOKEN_NAMES[inTokenIdx]} amount:
+                    <Input type="numeric"  
+                            value={amountIn} onChange={e=>handleAmountInChange(e.target.value)}></Input>
+                    </Label>
+                    <Balance name={getInTokenName()} amount={getInBalance()} />
+                    <Downarrow onClick={handleDirectionChange} />
+                    <Label >{TOKEN_NAMES[outTokenIdx()]} amount:
+                    <Input type="numeric" value={amountOut} onChange={e=>handleAmountOutChange(e.target.value)}></Input>
+                    </Label>
+                    <Label><Input type="submit" value="Swap"/></Label>
+                    <Balance name={getOutTokenName()} amount={getOutBalance()} />
 
-                <P style={{fontSize: "1.1em", fontFamily:"monospace", color: "teal"}}> Price: {prices[outTokenIdx()]}</P>
+                    <P style={{fontSize: "1.1em", fontFamily:"monospace", color: "teal"}}> Price: {prices[outTokenIdx()]}</P>
+                </Container>
                 {inTokenIdx === 0 ?
-                <Bordered>
-                    <P style={{fontSize: "0.9em", fontFamily:"monospace", color: "lightred"}}>Min Amount Out: {amountIn*prices[1] * (1-maxSlippage)}</P>
-                    <P style={{fontSize: "0.9em", fontFamily:"monospace", color: "black"}}>Slippage: {((prices[1]*amountIn - amountOut)/(prices[1]*amountIn)).toFixed(3)}</P>
-                    <P style={{fontSize: "0.9em", fontFamily:"monospace", color: "black"}}>Max Slippage: {maxSlippage}</P>
-                </Bordered> :
-                <Bordered>
+                <Container formElement secondary>
+                    <P style={{fontSize: "0.9em", fontFamily:"monospace"}}>Min Amount Out: {amountIn*prices[1] * (1-maxSlippage)}</P>
+                    <P style={{fontSize: "0.9em", fontFamily:"monospace"}}>Slippage: {((prices[1]*amountIn - amountOut)/(prices[1]*amountIn)).toFixed(3)}</P>
+                    <P style={{fontSize: "0.9em", fontFamily:"monospace"}}>Max Slippage: {maxSlippage}</P>
+                </Container> :
+                <Container bordered>
                     <P style={{fontSize: "0.9em", fontFamily:"monospace", color: "lightred"}}>Min Amount Out: {amountIn*prices[0] * (1-maxSlippage)}</P>
                     <P style={{fontSize: "0.9em", fontFamily:"monospace", color: "black"}}>Slippage: {((prices[0]*amountIn - amountOut)/(prices[0]*amountIn)).toFixed(3)}</P>
                     <P style={{fontSize: "0.9em", fontFamily:"monospace", color: "black"}}>Max Slippage: {maxSlippage}</P>
-                </Bordered>
+                </Container>
                 }
             </Form>
 
