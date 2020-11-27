@@ -4,11 +4,11 @@ import {
   Switch,
   Route
 } from "react-router-dom"
-import {ThemeProvider} from "styled-components"
-
 
 import {Nav} from "./widgets"
 import {Sandbox, Swap, Faucet} from "./pages"
+
+import {Container} from "./components/styled"
 
 import 'semantic-ui-css/semantic.min.css'
 import './App.css';
@@ -17,7 +17,7 @@ import './App.css';
 function App() {
   return (
     <Router>
-    <div className="App">
+    <Container root className="App">
       <Nav />
       <header className="App-header">
         <p>
@@ -38,7 +38,7 @@ function App() {
           <Swap />
         </Route>
       </Switch>
-    </div>
+    </Container>
     </Router>
   );
 }

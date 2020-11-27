@@ -32,6 +32,7 @@ export default css`
     ${props=>props.formElement ? formElement : ""}
     ${chubby}
     ${bordered}
+    ${props=>props.root && css`background: linear-gradient(.15turn, ${BG.darkened}, ${BG.primary}, ${BG.brightened});`}
     background-color: ${props=>props.brightened ? BG.brightened :
                                props.darkened  ?  BG.darkened   :
                                props.secondary ?  BG.secondary  :
