@@ -9,7 +9,7 @@ import {useCurrentUser, usePrices, useBalances} from "../hooks"
 
 import {removeLiquidity} from "../flow/actions"
 
-import {Form, P, Container}  from "../components/styled"
+import { P, Container, Form, Label, Input}  from "../components/styled"
 
 
 
@@ -36,30 +36,32 @@ export default () => {
     const amount0Out = 13.51
     const amount1Out = 21.23
     return   (
-        <div>
-            <h2> Remove Liquidity</h2>
-            <p>Hello {currentUser && currentUser.addr}</p>
-            <Balance name={`${TOKEN_NAMES[0]}-${TOKEN_NAMES[1]}_LP`} amount={balances[LP_TOKEN_NAME]} />
+        <Container trans section>
+            <Container trans centered>
+                <h2> Remove Liquidity</h2>
+                <p>Hello {currentUser && currentUser.addr}</p>
+            </Container>
 
             {actionUnderway && <h3>AWAITING CONFIRMATION</h3>}
             <Form id="withdraw_liquiditybox-form" onSubmit={e=>{e.preventDefault(); doRemove()}} >
             <Container chubby>
-                <label style={{display:"block", width: "90%", margin:"auto", textAlign:"center"}}>{LP_TOKEN_NAME} amount:
-                <input type="numeric"  style={{display:"block", width:"100%"}}
-                        value={amount} onChange={e=>setAmount(sanitizeAmount(e.target.value))}></input>
-                </label>
+                <Label >{LP_TOKEN_NAME} amount:
+                <Input type="numeric"  bordered
+                        value={amount} onChange={e=>setAmount(sanitizeAmount(e.target.value))}></Input>
+                </Label>
                 <Balance name={LP_TOKEN_NAME} amount={balances[LP_TOKEN_NAME]} />
                 
-                <input type="submit" value="Remove Liquidity" style={{display:"block", width: "90%", margin:"auto"}} />
-
+                <Input type="submit" value="Remove Liquidity" bordered formElement />
+                
                 <P style={{fontWeight: "bold"}}>0 to 1 ratio: {ratio && ratio.toFixed(3)}</P>
             </Container>
             <Container secondary formElement>
-                <P style={{fontSize: "0.9em", fontFamily:"monospace", color: "lightred"}}>LP amount out: {/*lpAmountOut*/}</P>
+                <P style={{fontSize: "0.9em", fontFamily:"monospace", color: "lightred"}}>{TOKEN_NAMES[0]}LP amount out: {/*lpAmountOut*/}</P>
+                <P style={{fontSize: "0.9em", fontFamily:"monospace", color: "lightred"}}>{TOKEN_NAMES[1]}LP amount out: {/*lpAmountOut*/}</P>
             </Container>
             </Form>
 
 
-        </div>
+        </Container>
     )
 }

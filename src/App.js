@@ -17,7 +17,7 @@ import './App.css';
 function App() {
   return (
     <Router>
-    <Container root className="App">
+    <Container root centered className="App">
       <Nav />
       <header className="App-header">
         <p>
@@ -38,6 +38,7 @@ function App() {
           <Swap />
         </Route>
       </Switch>
+      <Container classNme="footer">Footer</Container>
     </Container>
     </Router>
   );

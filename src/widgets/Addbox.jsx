@@ -8,7 +8,7 @@ import {sanitizeAmount} from "../utils"
 import {useCurrentUser, usePrices, useBalances} from "../hooks"
 
 import {addLiquidity} from "../flow/actions"
-import {Form, P, Container}  from "../components/styled"
+import {Form, P, Container, Input, Label}  from "../components/styled"
 
 
 
@@ -51,35 +51,36 @@ export default () => {
     }
     const lpAmountOut = 13.51
     return   (
-        <div>
-            <h2> Add Liquidity</h2>
-            <p>Hello {currentUser && currentUser.addr}</p>
-            <Balance name={`${TOKEN_NAMES[0]}- ${TOKEN_NAMES[1]}_LP`} amount={balances[LP_TOKEN_NAME]} />
+        <Container trans section>
+            <Container trans centered>
+                <h2> Add Liquidity</h2>
+                <p>Hello {currentUser && currentUser.addr}</p>
+            </Container>
 
             {actionUnderway && <h3>AWAITING CONFIRMATION</h3>}
             <Form id="liquiditybox-form-bitroot" onSubmit={e=>{e.preventDefault(); doAdd()}} >
                 <Container chubby>
-                    <label style={{display:"block", width: "90%", margin:"auto", textAlign:"center"}}>{TOKEN_NAMES[0]} amount:
-                    <input type="numeric"  style={{display:"block", width:"100%"}}
-                            value={amount0} onChange={e=>handleAmount0Change(e.target.value)}></input>
-                    </label>
+                    <Label >{TOKEN_NAMES[0]} amount:
+                    <Input type="numeric"  bordered
+                            value={amount0} onChange={e=>handleAmount0Change(e.target.value)}></Input>
+                    </Label>
                     <Balance name={TOKEN_NAMES[0]} amount={balances[0]} />
                     <p style={{display:"inline-block", width:"100%", textAlign:"center"}}>AND</p>
                     <label style={{display:"block", width: "90%", margin:"auto", textAlign:"center"}}>{TOKEN_NAMES[1]} amount:
-                    <input type="numeric"  style={{display:"block", width:"100%"}}
-                        value={amount1} onChange={e=>handleAmount1Change(e.target.value)}></input>
+                    <Input type="numeric" bordered 
+                        value={amount1} onChange={e=>handleAmount1Change(e.target.value)}></Input>
                     </label>
-                    <Balance name={TOKEN_NAMES[1]} amount={balances[1]} />
+                   <Balance name={TOKEN_NAMES[1]} amount={balances[1]} />
 
-                    <input type="submit" value="Add Liquidity" style={{display:"block", width: "90%", margin:"auto"}} />
+                   <Label><Input type="submit" value="Add Liquidity" bordered /></Label>
                 </Container>
                 <Container secondary formElement>
                     <P style={{fontWeight: "bold"}}>0 to 1 ratio: {ratio && ratio.toFixed(3)}</P>
+                    <P style={{fontSize: "0.9em", fontFamily:"monospace"}}> amount out: {lpAmountOut}</P>
                 </Container> 
             </Form>
-            <P style={{fontSize: "0.9em", fontFamily:"monospace"}}>LP amount out: {lpAmountOut}</P>
 
 
-        </div>
+        </Container>
     )
 }

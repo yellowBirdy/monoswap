@@ -97,21 +97,25 @@ export default ({}) => {
     }
 
     return (
-        <div>
-            <P>Hello {currentUser && currentUser.addr}</P>
-            {swapUnderway && <h1>AWAITING CONFIRMATION</h1>}
+        <Container trans section>
+            <Container trans centered>
+                <h2> Swap</h2>
+                <P>Hello {currentUser && currentUser.addr}</P>
+                {swapUnderway && <h1>AWAITING CONFIRMATION</h1>}
+            </Container>
             <Form id="swapbox-form-bitroot" onSubmit={e=>{e.preventDefault(); doSwap()}} >
                 <Container chubby>
                     <Label>{TOKEN_NAMES[inTokenIdx]} amount:
-                    <Input type="numeric"  
+                    <Input type="numeric"  bordered
                             value={amountIn} onChange={e=>handleAmountInChange(e.target.value)}></Input>
                     </Label>
                     <Balance name={getInTokenName()} amount={getInBalance()} />
                     <Downarrow onClick={handleDirectionChange} />
                     <Label >{TOKEN_NAMES[outTokenIdx()]} amount:
-                    <Input type="numeric" value={amountOut} onChange={e=>handleAmountOutChange(e.target.value)}></Input>
+                    <Input type="numeric" bordered
+                            value={amountOut} onChange={e=>handleAmountOutChange(e.target.value)}></Input>
                     </Label>
-                    <Label><Input type="submit" value="Swap"/></Label>
+                    <Label><Input type="submit" bordered value="Swap"/></Label>
                     <Balance name={getOutTokenName()} amount={getOutBalance()} />
 
                     <P style={{fontSize: "1.1em", fontFamily:"monospace", color: "teal"}}> Price: {prices[outTokenIdx()]}</P>
@@ -130,6 +134,6 @@ export default ({}) => {
                 }
             </Form>
 
-        </div>
+        </Container>
     )
 }
