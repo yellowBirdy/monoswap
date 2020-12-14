@@ -1,5 +1,5 @@
-import FungibleToken from 0xee82856bf20e2aa6
-import Bitroot from 0x01cf0e2f2f715450
+import FlowToken from 0xFLOWTOKEN_ADDRESS
+import Bitroot from 0xBITROOT_ADDRESS
 /* MINT Bitroot
 */
 

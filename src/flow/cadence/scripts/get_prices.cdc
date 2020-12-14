@@ -1,4 +1,4 @@
-import MonoswapFTPair from 0xf3fcd2c1a78f5eee
+import MonoswapFTPair from 0xMONOSWAP_ADDRESS
 
 pub fun main():  {String: UFix64} {
   return {

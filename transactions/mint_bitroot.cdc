@@ -3,11 +3,15 @@ import Bitroot from 0x01cf0e2f2f715450
 /* MINT Bitroot
 */
 
-transaction(recipientAddress: Address) {
+//transaction(recipientAddress: Address) {
+transaction() {
+
     let tokenMinter: &Bitroot.Minter
     let tokenReceiver: &{FungibleToken.Receiver}
 
     prepare(signer: AuthAccount) {
+        let recipientAddress: Address = 0x179b6b1cb6755e31
+
         self.tokenMinter = signer
         .borrow<&Bitroot.Minter>(from: /storage/BitrootMinter) 
         ?? panic("Signer is not the token admin")
@@ -20,7 +24,7 @@ transaction(recipientAddress: Address) {
     }
 
     execute {
-        let amount = UFix64(2000)
+        let amount = UFix64(20000000)
         self.tokenMinter.mintTokens(amount: amount, recipient: self.tokenReceiver)
 
     }

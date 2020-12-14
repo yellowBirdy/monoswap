@@ -1,6 +1,6 @@
 import FungibleToken from 0xee82856bf20e2aa6
 import Bitroot from 0x01cf0e2f2f715450
-import FauxFlow from 0x179b6b1cb6755e31
+import FlowToken from 0x0ae53cb6e3f42a79
 
 
 
@@ -80,10 +80,10 @@ pub contract MonoswapFTPair: FungibleToken {
     init() {
         self.xToken = 0x179b6b1cb6755e31
         self.yToken = 0x01cf0e2f2f715450
-        self.xName = "FauxFlow"
+        self.xName = "FlowToken"
         self.yName = "Bitroot"
 
-        self.xReserve <- FauxFlow.createEmptyVault();
+        self.xReserve <- FlowToken.createEmptyVault();
         self.yReserve  <- Bitroot.createEmptyVault();
         //self.blockTimestampLast = UInt256(0);
 
@@ -91,7 +91,7 @@ pub contract MonoswapFTPair: FungibleToken {
 
         self.totalSupply = 0.0;
         //TODO: figure out why Uniswap has MINIMUM_LIQUIDITY as high as 1000
-        self.MINIMUM_LIQUIDITY = UFix64(100);
+        self.MINIMUM_LIQUIDITY = UFix64(10);
         self.minimum_liquidity_locked <- MonoswapFTPair.createEmptyVault();
         self.minter <- create Minter();
 

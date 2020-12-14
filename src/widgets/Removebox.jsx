@@ -25,7 +25,7 @@ export default () => {
 
 
     useEffect(()=>{
-        prices[0] && setRatio(prices[0])
+        prices[0] && setRatio(prices[1  ])
     },[amount])
 
     const doRemove = async () => {
@@ -49,7 +49,7 @@ export default () => {
                 <Input type="numeric"  bordered
                         value={amount} onChange={e=>setAmount(sanitizeAmount(e.target.value))}></Input>
                 </Label>
-                <Balance name={LP_TOKEN_NAME} amount={balances[LP_TOKEN_NAME]} />
+                <Balance name={LP_TOKEN_NAME} amount={Number(balances[LP_TOKEN_NAME])} />
                 
                 <Input type="submit" value="Remove Liquidity" bordered formElement />
                 

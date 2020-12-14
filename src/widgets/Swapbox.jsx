@@ -5,7 +5,7 @@ import {getAmountOut, getAmountIn, swap} from "../flow/actions"
 import {useCurrentUser, usePrices, useBalances} from "../hooks"
 import {sanitizeAmount} from "../utils"
 import {Downarrow} from "../visual"
-import {Balance}  from "../components/subcomponents"
+import {Balance, Quantinfo}  from "../components/subcomponents"
 import {Form, Label, Input, P, Container }  from "../components/styled"
 
 
@@ -24,7 +24,7 @@ export default ({}) => {
     const [amountOut, setAmountOut] = useState(0)
     const [lastEdited, setLastEdited] = useState(null)
     const [inTokenIdx, setInTokenIdx] = useState(0)
-    const [maxSlippage, setMaxSlippage] = useState(0.1)
+    const [maxSlippage, setMaxSlippage] = useState(0.3)
     const [swapUnderway, setSwapUnderway] = useState(false)
 
     const currentUser = useCurrentUser()
@@ -55,8 +55,8 @@ export default ({}) => {
 
     const getInTokenName = () => TOKEN_NAMES[inTokenIdx]
     const getOutTokenName = () => TOKEN_NAMES[outTokenIdx()]
-    const getInBalance  = () => balances[inTokenIdx]
-    const getOutBalance = () => balances[outTokenIdx()]
+    const getInBalance  = () => Number(balances[inTokenIdx])
+    const getOutBalance = () => Number(balances[outTokenIdx()])
     
     useEffect(()=>{
         switch (lastEdited) {
@@ -118,17 +118,17 @@ export default ({}) => {
                     <Label><Input type="submit" bordered value="Swap"/></Label>
                     <Balance name={getOutTokenName()} amount={getOutBalance()} />
 
-                    <P style={{fontSize: "1.1em", fontFamily:"monospace", color: "teal"}}> Price: {prices[outTokenIdx()]}</P>
+                    <Quantinfo label="Price" amount={Number(prices[outTokenIdx()])} />
                 </Container>
                 {inTokenIdx === 0 ?
                 <Container formElement secondary>
                     <P style={{fontSize: "0.9em", fontFamily:"monospace"}}>Min Amount Out: {amountIn*prices[1] * (1-maxSlippage)}</P>
-                    <P style={{fontSize: "0.9em", fontFamily:"monospace"}}>Slippage: {((prices[1]*amountIn - amountOut)/(prices[1]*amountIn)).toFixed(3)}</P>
+                    <P style={{fontSize: "0.9em", fontFamily:"monospace"}}>Price Impact: {((prices[1]*amountIn - amountOut)/(prices[1]*amountIn)).toFixed(3)}</P>
                     <P style={{fontSize: "0.9em", fontFamily:"monospace"}}>Max Slippage: {maxSlippage}</P>
                 </Container> :
                 <Container bordered>
                     <P style={{fontSize: "0.9em", fontFamily:"monospace", color: "lightred"}}>Min Amount Out: {amountIn*prices[0] * (1-maxSlippage)}</P>
-                    <P style={{fontSize: "0.9em", fontFamily:"monospace", color: "black"}}>Slippage: {((prices[0]*amountIn - amountOut)/(prices[0]*amountIn)).toFixed(3)}</P>
+                    <P style={{fontSize: "0.9em", fontFamily:"monospace", color: "black"}}>Price Impact: {((prices[0]*amountIn - amountOut)/(prices[0]*amountIn)).toFixed(3)}</P>
                     <P style={{fontSize: "0.9em", fontFamily:"monospace", color: "black"}}>Max Slippage: {maxSlippage}</P>
                 </Container>
                 }

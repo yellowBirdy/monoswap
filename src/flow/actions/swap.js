@@ -18,7 +18,7 @@ export default async ({inTokenName, amountIn, minAmountOut}) => {
     ]
     let swapTx
     switch (inTokenName) {
-        case "FauxFlow":
+        case "FlowToken":
             swapTx = await do_xToY(args)
             break
         case "Bitroot":

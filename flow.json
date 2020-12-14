@@ -1,10 +1,31 @@
 {
+	"address" : "127.0.0.1:3569",
+	"gasLimit" : 1000, 
 	"accounts": {
 		"service": {
 			"address": "f8d6e0586b0a20c7",
 			"privateKey": "bf9db4706c2fdb9011ee7e170ccac492f05427b96ab41d8bf2d8c58443704b76",
 			"sigAlgorithm": "ECDSA_P256",
 			"hashAlgorithm": "SHA3_256"
+		},
+		"bitroot": {
+			"address": "01cf0e2f2f715450",
+			"privateKey": "36ece953d6b18f0298b7a7121c3a157a82a53139ba8d85a4b1caf499145253fb",
+			"publicKey": "49267fc6014a148a9c73a9cc74fd5f5d09d034cc6a9e50bf7de6619fb36fdfe4c48a9fd3d39a3530780d8c0189804fe6b975e3c4db3f927a4607fb824d773a3b",
+			"sigAlgorithm": "ECDSA_P256",
+			"hashAlgorithm": "SHA3_256"
+		},
+		"monoswap": {
+			"address": "179b6b1cb6755e31",
+			"privateKey": "ba54febaa82622f063bc075b8783e6d079e949d4364e13b43c4df01d1e7406d7",
+			"publicKey": "ae5645446bbd138524546ac2d536591823fd6fed284b7aab36d762b6bfd8ae35c0a4da6dce254cbb36843b597c33a26358376e0e1520a33b5457a41ec1a99894",
+			"sigAlgorithm": "ECDSA_P256",
+			"hashAlgorithm": "SHA3_256"
 		}
+	},
+	"emulatorAccounts": {
+		"bitroot": "01cf0e2f2f715450",
+		"exchange": "f3fcd2c1a78f5eee",
+		"user1": "e03daebed8ca0615"
 	}
 }

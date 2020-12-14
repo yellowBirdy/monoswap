@@ -6,7 +6,7 @@ import {
 } from "react-router-dom"
 
 import {Nav} from "./widgets"
-import {Sandbox, Swap, Faucet} from "./pages"
+import {Sandbox, Swap, Install} from "./pages"
 
 import {Container} from "./components/styled"
 
@@ -20,19 +20,13 @@ function App() {
     <Container root centered className="App">
       <Nav />
       <header className="App-header">
-        <p>
-          Welcome to Monoswap.
-        </p>
-        <p>
-          A DEX on Flow
-        </p>
       </header>
       <Switch>
         <Route path="/sandbox">
           <Sandbox />
         </Route> 
-        <Route path="/faucet">
-          <Faucet />
+        <Route path="/install">
+          <Install />
         </Route> 
         <Route path="/">
           <Swap />

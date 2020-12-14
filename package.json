@@ -22,7 +22,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "flow:emulator": "flow emulator start -v --http-port 8080 -p 3570",
+    "flow:emulator": "flow emulator start -v --http-port 8080 -p 3569",
     "flow:dev-wallet": "PK=bf9db4706c2fdb9011ee7e170ccac492f05427b96ab41d8bf2d8c58443704b76 && fcl-wallet"
   },
   "eslintConfig": {

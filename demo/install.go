@@ -8,7 +8,7 @@ import (
 )
 
 const Bitroot = "Bitroot"
-const FauxFlow = "FauxFlow"
+const FlowToken = "FlowToken"
 const Exchange = "Exchange"
 
 func ufix(input string) cadence.UFix64 {
@@ -29,6 +29,6 @@ func main() {
 	flow.SendTransactionWithArguments("install_all", "User3")
 
 	//fmt.Println("Minting Flow")
-	//flow.FindAddress(FauxFlow)
+	//flow.FindAddress(FlowToken)
 	//flow.SendTransactionWithArguments("mint_flow", "User1",)
 }

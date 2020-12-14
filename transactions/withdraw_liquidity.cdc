@@ -1,5 +1,5 @@
 import FungibleToken from 0xee82856bf20e2aa6
-import FauxFlow from 0x179b6b1cb6755e31
+import FlowToken from 0x179b6b1cb6755e31
 import Bitroot from 0x01cf0e2f2f715450
 import MonoswapFTPair from 0xf3fcd2c1a78f5eee
 
@@ -17,7 +17,7 @@ transaction(lAmount: UFix64) {
         ?? panic("Unable to borrow xToken provider reference")
 
         self.xTokensReceiver = signer
-        .getCapability(/public/FauxFlowReceiver)!
+        .getCapability(/public/flowTokenReceiver)!
         .borrow<&{FungibleToken.Receiver}>()
         ?? panic("Unable to borrow xToken receiver reference")
 

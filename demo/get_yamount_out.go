@@ -8,7 +8,7 @@ import (
 )
 
 const Bitroot = "Bitroot"
-const FauxFlow = "FauxFlow"
+const FlowToken = "FlowToken"
 const Exchange = "Exchange"
 
 func ufix(input string) cadence.UFix64 {

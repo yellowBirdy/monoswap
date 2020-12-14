@@ -25,7 +25,7 @@ export default () => {
 
 
     useEffect(()=>{
-        prices[0] && setRatio(prices[0])
+        prices[0] && setRatio(prices[1])
     },[amount0, amount1])
 
     const handleAmount0Change = async (amount0) => {
@@ -64,19 +64,20 @@ export default () => {
                     <Input type="numeric"  bordered
                             value={amount0} onChange={e=>handleAmount0Change(e.target.value)}></Input>
                     </Label>
-                    <Balance name={TOKEN_NAMES[0]} amount={balances[0]} />
+                    <Balance name={TOKEN_NAMES[0]} amount={Number(balances[0])} />
                     <p style={{display:"inline-block", width:"100%", textAlign:"center"}}>AND</p>
                     <label style={{display:"block", width: "90%", margin:"auto", textAlign:"center"}}>{TOKEN_NAMES[1]} amount:
                     <Input type="numeric" bordered 
                         value={amount1} onChange={e=>handleAmount1Change(e.target.value)}></Input>
                     </label>
-                   <Balance name={TOKEN_NAMES[1]} amount={balances[1]} />
+                   <Balance name={TOKEN_NAMES[1]} amount={Number(balances[1])} />
 
                    <Label><Input type="submit" value="Add Liquidity" bordered /></Label>
                 </Container>
                 <Container secondary formElement>
                     <P style={{fontWeight: "bold"}}>0 to 1 ratio: {ratio && ratio.toFixed(3)}</P>
                     <P style={{fontSize: "0.9em", fontFamily:"monospace"}}> amount out: {lpAmountOut}</P>
+                    <Balance name={LP_TOKEN_NAME} amount={Number(balances[LP_TOKEN_NAME])} />
                 </Container> 
             </Form>
 

@@ -9,7 +9,7 @@ export default () => {
     return (
         <div>
             <Install />
-            <Mint />
+            {/*<Mint />*/}
 
         </div>
     )

@@ -1,4 +1,5 @@
-import MonoswapFTPair from 0xf3fcd2c1a78f5eee
+import MonoswapFTPair from 0xMONOSWAP_ADDRESS
+
 
 pub fun main(amountIn: UFix64, inTokenName: String):  UFix64 {
 	let reserves: {String: UFix64} = MonoswapFTPair.getReserves();

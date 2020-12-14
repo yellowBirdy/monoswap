@@ -1,11 +1,7 @@
-//import NonFungibleToken from 0x01cf0e2f2f715450
-import SurvivalNFT from 0x179b6b1cb6755e31
+import MonoswapFTPair from 0xMONOSWAP_ADDRESS
 
 // This transaction returns an array of all the nft ids in the collection
 
-pub fun main() {
-
-    log("Total Supply: ")
-    log(SurvivalNFT.totalSupply)
-
+pub fun main() UFix64 {
+    return MonoswapFTPair.totalSupply)
 }

@@ -1,4 +1,4 @@
 import React from "react"
-import {Quantinfo} from "../styled"
+import Quantinfo from "./Quantinfo"
 
-export default  ({name, amount}) => <Quantinfo balance>{name} Balance: {amount}</Quantinfo> 
+export default  ({name, amount}) => <Quantinfo balance amount={amount} label={`Balance of ${name}`}></Quantinfo> 
