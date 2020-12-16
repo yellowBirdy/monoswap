@@ -118,7 +118,9 @@ func main() {
 		fmt.Println(err)
 		panic("failed to submit transaction")
 	}
-	  
+	
+	fmt.Println("tx id")
+	fmt.Println(tx.ID())
 	result, err := flowClient.GetTransactionResult(context.Background(), tx.ID())
 	if err != nil {
 		panic("failed to get transaction result")

@@ -1,7 +1,9 @@
-import FungibleToken from 0xee82856bf20e2aa6
-import Bitroot from 0x01cf0e2f2f715450
-import MonoswapFTPair from 0x179b6b1cb6755e31
-
+//import FungibleToken from 0xee82856bf20e2aa6
+//import Bitroot from 0x01cf0e2f2f715450
+//import MonoswapFTPair from 0x179b6b1cb6755e31
+import FungibleToken from 0x9a0766d93b6608b7
+import Bitroot from 0x40e0ced5e2cf034c
+import MonoswapFTPair from 0x56b4abe67bcb092d
 /*
     INSTALL ALL VAULTS
     install_all.cdc

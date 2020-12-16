@@ -11,11 +11,15 @@ import (
 	"github.com/joho/godotenv"
 	//"github.com/enescakir/emoji"
 	"github.com/onflow/cadence"
+	//"flow-go-sdk"
+	//"flow-go-sdk/client"
+	//"flow-go-sdk/crypto"
 	"github.com/onflow/flow-go-sdk"
 	"github.com/onflow/flow-go-sdk/client"
+	"github.com/onflow/flow-go-sdk/crypto"
 	"context"
 	"google.golang.org/grpc"
-	"github.com/onflow/flow-go-sdk/crypto"
+
 	//--
 	//"github.com/onflow/flow-go-sdk/templates"
 )
@@ -117,7 +121,9 @@ func main() {
 		fmt.Println(err)
 		panic("failed to submit transaction")
 	}
-	  
+	
+	fmt.Println("tx id")
+	fmt.Println(tx.ID())
 	result, err := flowClient.GetTransactionResult(context.Background(), tx.ID())
 	if err != nil {
 		panic("failed to get transaction result")
