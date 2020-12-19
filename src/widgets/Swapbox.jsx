@@ -25,7 +25,6 @@ export default ({}) => {
     const [lastEdited, setLastEdited] = useState(null)
     const [inTokenIdx, setInTokenIdx] = useState(0)
     const [maxSlippage, setMaxSlippage] = useState(0.3)
-    const [swapUnderway, setSwapUnderway] = useState(false)
 
     const currentUser = useCurrentUser()
     const prices      = usePrices([amountIn]) //changing amountOut triggers change in amoutIn as well 
@@ -77,8 +76,7 @@ export default ({}) => {
         let inTokenName = getInTokenName() 
         let minAmountOut = String((amountIn*prices[1] * (1-maxSlippage)).toFixed(3))
 
-        setSwapUnderway(true)
-        setSwapUnderway(false)
+        swap({inTokenName, amountIn, minAmountOut})
     }
 
     const handleDirectionChange = (e) => {
@@ -100,7 +98,6 @@ export default ({}) => {
             <Container trans centered>
                 <h2> Swap</h2>
                 <P>Hello {currentUser && currentUser.addr}</P>
-                {swapUnderway && <h1>AWAITING CONFIRMATION</h1>}
             </Container>
             <Form id="swapbox-form-bitroot" onSubmit={e=>{e.preventDefault(); doSwap()}} >
                 <Container chubby>

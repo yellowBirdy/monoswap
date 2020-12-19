@@ -26,7 +26,7 @@ function App() {
       <Nav />
       <header className="App-header">
       {!!err && <div style={{border: "pink 2px solid", position: "fixed", top:"20", width:"80%", left:"10%"}}>Error: {err}</div>}
-      {txStatus.state !== null && <div style={{border: "green 2px solid", position: "fixed", top:"100", width:"80%", left:"10%"}}>TxStatus: {txStatus.state}</div>}
+      {txStatus.state !== null && <div style={{border: "green 2px solid", position: "fixed", top:100, width:"80%", left:"10%"}}>TxStatus: {txStatus.state}</div>}
       </header>
       <Switch>
         <Route path="/sandbox">

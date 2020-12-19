@@ -35,8 +35,8 @@ pub contract MonoswapFTPair: FungibleToken {
 
     pub let MINIMUM_LIQUIDITY: UFix64;
     //pub let factory Address;
-    pub let xToken: Address;  //FLOW
-    pub let yToken: Address;  //BITROOT  
+    pub let xToken: Address;  //BITROOT
+    pub let yToken: Address;  //  FLOW
     pub let xName: String;
     pub let yName: String;
 
@@ -80,13 +80,20 @@ pub contract MonoswapFTPair: FungibleToken {
     //TODO: implement get slippage (%)
 
     init() {
-        self.xToken = 0x179b6b1cb6755e31
-        self.yToken = 0x01cf0e2f2f715450
-        self.xName = "FlowToken"
-        self.yName = "Bitroot"
+        //self.xToken = 0x179b6b1cb6755e31
+        //self.yToken = 0x01cf0e2f2f715450
+        //self.xName = "FlowToken"
+        //self.yName = "Bitroot"
+//
+        //self.xReserve <- FlowToken.createEmptyVault();
+        //self.yReserve  <- Bitroot.createEmptyVault();
+        self.xToken = 0x56b4abe67bcb092d
+        self.yToken = 0x40e0ced5e2cf034c
+        self.xName = "Bitroot"
+        self.yName = "FlowToken"
 
-        self.xReserve <- FlowToken.createEmptyVault();
-        self.yReserve  <- Bitroot.createEmptyVault();
+        self.xReserve  <- Bitroot.createEmptyVault();
+        self.yReserve <- FlowToken.createEmptyVault();
         //self.blockTimestampLast = UInt256(0);
 
         self.fee = UFix64(0);
