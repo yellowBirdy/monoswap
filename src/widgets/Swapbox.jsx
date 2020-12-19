@@ -78,7 +78,6 @@ export default ({}) => {
         let minAmountOut = String((amountIn*prices[1] * (1-maxSlippage)).toFixed(3))
 
         setSwapUnderway(true)
-        console.log(swap({inTokenName, amountIn, minAmountOut}))
         setSwapUnderway(false)
     }
 

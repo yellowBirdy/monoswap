@@ -1,5 +1,5 @@
 import React from 'react'
 import * as fcl from "@onflow/fcl"
+import {Button} from "../styled"
 
-
-export default () => <button onClick={fcl.authenticate}>Log in/Sign up</button>    
+export default () => <Button onClick={fcl.authenticate}>Log in/Sign up</Button>    

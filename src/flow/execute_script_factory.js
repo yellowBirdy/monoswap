@@ -1,6 +1,6 @@
 import * as fcl from "@onflow/fcl";
-
 import loadCode from "../utils/prepare_cadence_code";
+import flowDataService from "./flowDataService"
 
 export default async (url, match) => {
   const code = await loadCode(url, match);
@@ -10,6 +10,12 @@ export default async (url, match) => {
         fcl.script(code),
         fcl.args(args)     
       ]
-    ).then(fcl.decode);
+    )
+    .then(txResponse => {
+      return fcl.decode(txResponse)
+    })
+    .catch(err => {
+      flowDataService.fireEvent("error", [err.message])
+    });
   };
 };

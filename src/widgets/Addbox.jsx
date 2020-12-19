@@ -14,7 +14,6 @@ import {Form, P, Container, Input, Label}  from "../components/styled"
 
 export default () => {
 
-    const [actionUnderway, setActionUnderway] = useState(false)
     const [amount0, setAmount0] = useState(0)
     const [amount1, setAmount1] = useState(0)
 
@@ -45,9 +44,7 @@ export default () => {
     }
 
     const doAdd = async () => {
-        setActionUnderway(true)
         await addLiquidity({amount0, amount1})
-        setTimeout(()=>setActionUnderway(false), 1000)
     }
     const lpAmountOut = 13.51
     return   (
@@ -57,7 +54,6 @@ export default () => {
                 <p>Hello {currentUser && currentUser.addr}</p>
             </Container>
 
-            {actionUnderway && <h3>AWAITING CONFIRMATION</h3>}
             <Form id="liquiditybox-form-bitroot" onSubmit={e=>{e.preventDefault(); doAdd()}} >
                 <Container chubby>
                     <Label >{TOKEN_NAMES[0]} amount:

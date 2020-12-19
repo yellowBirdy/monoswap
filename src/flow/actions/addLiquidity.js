@@ -13,11 +13,4 @@ export default async ({amount0, amount1}) => {
         fcl.arg(amount1, t.UFix64)
     ]
     let addTx = await do_add_liquidity(args)
- 
-
-    fcl.tx(addTx).subscribe(txStatus => {
-        if (fcl.tx.isExecuted(txStatus)) {
-            console.log(`Adding liquidity  has been executed.`) 
-        }
-    })
 }  

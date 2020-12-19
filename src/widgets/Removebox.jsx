@@ -15,7 +15,6 @@ import { P, Container, Form, Label, Input}  from "../components/styled"
 
 export default () => {
 
-    const [actionUnderway, setActionUnderway] = useState(false)
     const [amount, setAmount] = useState(0)
 
     const currentUser = useCurrentUser()
@@ -29,9 +28,7 @@ export default () => {
     },[amount])
 
     const doRemove = async () => {
-        setActionUnderway(true)
         await removeLiquidity({amount})
-        setTimeout(()=>setActionUnderway(false), 1000)
     }
     const amount0Out = 13.51
     const amount1Out = 21.23
@@ -42,7 +39,6 @@ export default () => {
                 <p>Hello {currentUser && currentUser.addr}</p>
             </Container>
 
-            {actionUnderway && <h3>AWAITING CONFIRMATION</h3>}
             <Form id="withdraw_liquiditybox-form" onSubmit={e=>{e.preventDefault(); doRemove()}} >
             <Container chubby>
                 <Label >{LP_TOKEN_NAME} amount:

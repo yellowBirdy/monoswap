@@ -12,11 +12,5 @@ export default async ({amount}) => {
         fcl.arg(amount, t.UFix64)
     ]
     let withdrawTx = await do_withdraw_liquidity(args)
- 
 
-    fcl.tx(withdrawTx).subscribe(txStatus => {
-        if (fcl.tx.isExecuted(txStatus)) {
-            console.log(`withdrawing liquidity  has been executed.`) 
-        }
-    })
 }  

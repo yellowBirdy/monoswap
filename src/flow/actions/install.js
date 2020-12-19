@@ -8,10 +8,4 @@ export default async () => {
     const do_install = await execute_transaction_factory(installUrl)
     
     const installTx = await do_install()
-
-    fcl.tx(installTx).subscribe(txStatus => {
-        if (fcl.tx.isExecuted(txStatus)) {
-            console.log(`Monoswap Demo dependencies hav been installed for current account.`)
-        }
-    })
 }  

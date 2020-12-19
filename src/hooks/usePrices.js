@@ -9,8 +9,7 @@ export default (triggersOn = []) => {
     useEffect(()=>{        
         const updPrices = async ()=>{
             let latestPrices = await getPrices()
-            //TODO: turn prices around as they relate to the out tokens
-            setPrices([latestPrices[TOKEN_NAMES[0]], latestPrices[TOKEN_NAMES[1]]].map(Number))
+            setPrices([latestPrices[TOKEN_NAMES[1]], latestPrices[TOKEN_NAMES[0]]].map(Number))
         }
         updPrices()
 

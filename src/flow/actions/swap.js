@@ -24,11 +24,6 @@ export default async ({inTokenName, amountIn, minAmountOut}) => {
         case "Bitroot":
             swapTx = await do_yToX(args)
             break
-    }
+    } 
 
-    fcl.tx(swapTx).subscribe(txStatus => {
-        if (fcl.tx.isExecuted(txStatus)) {
-            console.log(`Swap of ${inTokenName} has been executed.`) //TODO: add amount out
-        }
-    })
 }  

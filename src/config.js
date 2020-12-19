@@ -60,7 +60,7 @@ export const LP_TOKEN_ADDRESS = addresses['Monoswap']
 
 fcl.config()
   .put("challenge.handshake", walletProviderHost)
-  .put("accessNode", accessAPIHost)
+  .put("accessNode.api", accessAPIHost)
 
 
 
