@@ -18,6 +18,7 @@ export default (triggersOn = []) => {
         if (!currentUser || !currentUser.addr) return
         const updBalances = async () => {
             let balancesObj = await getAccBalances({address: currentUser.addr}) 
+            if (!balancesObj) return //in case vaults not installed
             //balanes state is an array of tradable token balances which is used by the swap
             //but it also has balances available as fields on the 
             const balances = [balancesObj[TOKEN_NAMES[0]], balancesObj[TOKEN_NAMES[1]]]
