@@ -122,9 +122,9 @@ export default ({}) => {
                     <P style={{fontSize: "0.9em", fontFamily:"monospace"}}>Max Slippage: {maxSlippage}</P>
                 </Container> :
                 <Container bordered>
-                    <P style={{fontSize: "0.9em", fontFamily:"monospace", color: "lightred"}}>Min Amount Out: {amountIn*prices[1] * (1-maxSlippage)}</P>
-                    <P style={{fontSize: "0.9em", fontFamily:"monospace", color: "black"}}>Price Impact: {((prices[1]*amountIn - amountOut)/(prices[1]*amountIn)).toFixed(3)}</P>
-                    <P style={{fontSize: "0.9em", fontFamily:"monospace", color: "black"}}>Max Slippage: {maxSlippage}</P>
+                    <P style={{fontSize: "0.9em", fontFamily:"monospace"}}>Min Amount Out: {amountIn*prices[1] * (1-maxSlippage)}</P>
+                    <P style={{fontSize: "0.9em", fontFamily:"monospace"}}>Price Impact: {((prices[1]*amountIn - amountOut)/(prices[1]*amountIn)).toFixed(3)}</P>
+                    <P style={{fontSize: "0.9em", fontFamily:"monospace"}}>Max Slippage: {maxSlippage}</P>
                 </Container>
                 }
             </Form>
