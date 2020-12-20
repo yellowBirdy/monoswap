@@ -2,11 +2,15 @@ import {useState, useEffect} from "react"
 
 import {TOKEN_NAMES, LP_TOKEN_NAME} from "../config"
 import { getAccBalances } from "../flow/actions"
-import { useCurrentUser } from "."
+import { useCurrentUser, useTxStatus } from "."
+
+
 
 export default (triggersOn = []) => {
     const currentUser = useCurrentUser()
+    const [txStatus] = useTxStatus()
     triggersOn.push(currentUser)
+    triggersOn.push(txStatus)
 
     const [balances, setBalances] = useState([null, null, null])
 

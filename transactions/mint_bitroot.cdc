@@ -12,8 +12,10 @@ transaction() {
     let tokenReceiver: &{FungibleToken.Receiver}
 
     prepare(signer: AuthAccount) {
-        //let recipientAddress: Address = 0x179b6b1cb6755e31  // EMU
-        let recipientAddress: Address = 0x56b4abe67bcb092d    // TESTNET
+        //let recipientAddress: Address = 0x179b6b1cb6755e31  // EMU exchange
+        //let recipientAddress: Address = 0x56b4abe67bcb092d    // TESTNET exchange
+        let recipientAddress: Address = 0xcf5f3feb5da272c4    // TESTNET
+
 
 
         self.tokenMinter = signer

@@ -13,11 +13,11 @@ transaction(xAmount: UFix64, yAmount: UFix64) {
     
     prepare(signer: AuthAccount) {
 
-        self.yTokensProvider = signer
+        self.xTokensProvider = signer
         .borrow<&{FungibleToken.Provider}>(from: /storage/BitrootVault)
         ?? panic("Unable to borrow yToken provider reference")
 
-        self.xTokensProvider = signer
+        self.yTokensProvider = signer
         .borrow<&{FungibleToken.Provider}>(from: /storage/flowTokenVault)
         ?? panic("Unable to borrow xToken provider reference")
 
@@ -28,8 +28,8 @@ transaction(xAmount: UFix64, yAmount: UFix64) {
     }
 
     execute {
-        let xTokens <- self.xTokensProvider.withdraw(amount: yAmount)
-        let yTokens <- self.yTokensProvider.withdraw(amount: xAmount)
+        let xTokens <- self.xTokensProvider.withdraw(amount: xAmount)
+        let yTokens <- self.yTokensProvider.withdraw(amount: yAmount)
 
         MonoswapFTPair.addLiquidity(ltReceiver: self.tokenReceiver, xTokens: <-xTokens, yTokens: <-yTokens)
 

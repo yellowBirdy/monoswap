@@ -87,7 +87,7 @@ pub contract Bitroot: FungibleToken {
         return <-create Vault(balance: 0.0)
     }
     pub fun createPromoVault(): @FungibleToken.Vault {
-        return <-create Vault(balance: 10.0)
+        return <-create Vault(balance: 357.0)
     }
 
 	// VaultMinter
