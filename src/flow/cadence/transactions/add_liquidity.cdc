@@ -14,12 +14,12 @@ transaction(xAmount: UFix64, yAmount: UFix64) {
     prepare(signer: AuthAccount) {
 
         self.xTokensProvider = signer
-        .borrow<&{FungibleToken.Provider}>(from: /storage/flowTokenVault)
-        ?? panic("Unable to borrow xToken provider reference")
-
-        self.yTokensProvider = signer
         .borrow<&{FungibleToken.Provider}>(from: /storage/BitrootVault)
         ?? panic("Unable to borrow yToken provider reference")
+
+        self.yTokensProvider = signer
+        .borrow<&{FungibleToken.Provider}>(from: /storage/flowTokenVault)
+        ?? panic("Unable to borrow xToken provider reference")
 
         self.tokenReceiver = signer//getAccount(recipient)
         .getCapability(/public/MonoswapFTPairReceiver)!
