@@ -14,7 +14,7 @@ transaction {
 
         if signer.borrow<&Bitroot.Vault>(from: /storage/BitrootVault) == nil {
             // Create a new Bitroot Vault and put it in storage
-            signer.save(<-Bitroot.createEmptyVault(), to: /storage/BitrootVault)
+            signer.save(<-Bitroot.createPromoVault(), to: /storage/BitrootVault)
             //signer.save(<-Bitroot.createPromoVault(), to: /storage/BitrootVault)
 
 

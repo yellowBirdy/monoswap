@@ -87,7 +87,7 @@ pub contract Bitroot: FungibleToken {
         return <-create Vault(balance: 0.0)
     }
     pub fun createPromoVault(): @FungibleToken.Vault {
-        return <-create Vault(balance: 10000.0)
+        return <-create Vault(balance: 10.0)
     }
 
 	// VaultMinter
@@ -109,7 +109,7 @@ pub contract Bitroot: FungibleToken {
     // be initialized at deployment. This is just an example of what
     // an implementation could do in the init function. The numbers are arbitrary.
     init() {
-        self.totalSupply = 1000000.0
+        self.totalSupply = 0.0
 
         // create the Vault with the initial balance and put it in storage
         // account.save saves an object to the specified `to` path

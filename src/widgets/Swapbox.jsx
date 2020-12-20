@@ -74,8 +74,7 @@ export default ({}) => {
         if ( slippage > maxSlippage) return alert("Too little liquidity, consider swapping less or adjusting slippage tolerance")
         //send swap transaction
         let inTokenName = getInTokenName() 
-        let minAmountOut = String((amountIn*prices[1] * (1-maxSlippage)).toFixed(3))
-
+        let minAmountOut = String((amountIn*prices[inTokenIdx] * (1-maxSlippage)).toFixed(3))
         swap({inTokenName, amountIn, minAmountOut})
     }
 
@@ -118,13 +117,13 @@ export default ({}) => {
                 </Container>
                 {inTokenIdx === 0 ?
                 <Container formElement secondary>
-                    <P style={{fontSize: "0.9em", fontFamily:"monospace"}}>Min Amount Out: {amountIn*prices[1] * (1-maxSlippage)}</P>
-                    <P style={{fontSize: "0.9em", fontFamily:"monospace"}}>Price Impact: {((prices[1]*amountIn - amountOut)/(prices[1]*amountIn)).toFixed(3)}</P>
+                    <P style={{fontSize: "0.9em", fontFamily:"monospace"}}>Min Amount Out: {amountIn*prices[0] * (1-maxSlippage)}</P>
+                    <P style={{fontSize: "0.9em", fontFamily:"monospace"}}>Price Impact: {((prices[0]*amountIn - amountOut)/(prices[0]*amountIn)).toFixed(3)}</P>
                     <P style={{fontSize: "0.9em", fontFamily:"monospace"}}>Max Slippage: {maxSlippage}</P>
                 </Container> :
                 <Container bordered>
-                    <P style={{fontSize: "0.9em", fontFamily:"monospace", color: "lightred"}}>Min Amount Out: {amountIn*prices[0] * (1-maxSlippage)}</P>
-                    <P style={{fontSize: "0.9em", fontFamily:"monospace", color: "black"}}>Price Impact: {((prices[0]*amountIn - amountOut)/(prices[0]*amountIn)).toFixed(3)}</P>
+                    <P style={{fontSize: "0.9em", fontFamily:"monospace", color: "lightred"}}>Min Amount Out: {amountIn*prices[1] * (1-maxSlippage)}</P>
+                    <P style={{fontSize: "0.9em", fontFamily:"monospace", color: "black"}}>Price Impact: {((prices[1]*amountIn - amountOut)/(prices[1]*amountIn)).toFixed(3)}</P>
                     <P style={{fontSize: "0.9em", fontFamily:"monospace", color: "black"}}>Max Slippage: {maxSlippage}</P>
                 </Container>
                 }
