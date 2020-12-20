@@ -1,1 +1,1 @@
-web: yarn start
+web: REACT_APP_CHAIN=testnet yarn start
