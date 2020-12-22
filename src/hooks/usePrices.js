@@ -13,7 +13,7 @@ export default (triggersOn = []) => {
     useEffect(()=>{        
         const updPrices = async ()=>{
             let latestPrices = await getPrices()
-            setPrices([latestPrices[TOKEN_NAMES[1]], latestPrices[TOKEN_NAMES[0]]].map(Number))
+            latestPrices && setPrices([latestPrices[TOKEN_NAMES[1]], latestPrices[TOKEN_NAMES[0]]].map(Number))
         }
         updPrices()
 
