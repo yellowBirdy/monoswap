@@ -33,9 +33,9 @@ export default ({}) => {
     const outTokenIdx = ()=>(inTokenIdx+1)%2
 
     const handleAmountInChange = async (amountIn) => {
-        if (Number.isNaN(Number(amountIn))) return  // if emtpy 
+//TODO: move the line below (at least) to a Numerical INput component
+        if (amountIn !== "." && Number.isNaN(Number(amountIn))) return  // if emtpy 
         
-        //amountIn = sanitizeAmount(amountIn)
         const sanitizedAmountIn = sanitizeAmount(amountIn)
 
         setAmountIn(amountIn)
@@ -45,15 +45,12 @@ export default ({}) => {
         setLastEdited(LAST_EDITED_VALS.IN)
     }
     const handleAmountOutChange = async (amountOut) => {
-        if (Number.isNaN(Number(amountOut))) return  // if emtpy 
+        if (amountOut !== "." && Number.isNaN(Number(amountOut))) return  // if emtpy 
         
-        //amountOut = sanitizeAmount(amountOut)
         const sanitizedAmountOut = sanitizeAmount(amountOut)
-
         
         setAmountOut(amountOut)
         let inTokenName = IN_TOKEN_NAME[inTokenIdx]
-        //setAmountIn(await getAmountIn({amountOut, inTokenName}))
         setAmountIn(await getAmountIn({amountOut: sanitizedAmountOut, inTokenName}))
         setLastEdited(LAST_EDITED_VALS.OUT)
     }
