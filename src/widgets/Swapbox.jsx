@@ -35,20 +35,26 @@ export default ({}) => {
     const handleAmountInChange = async (amountIn) => {
         if (Number.isNaN(Number(amountIn))) return  // if emtpy 
         
-        amountIn = sanitizeAmount(amountIn)
+        //amountIn = sanitizeAmount(amountIn)
+        const sanitizedAmountIn = sanitizeAmount(amountIn)
 
         setAmountIn(amountIn)
         let inTokenName = IN_TOKEN_NAME[inTokenIdx]
-        setAmountOut(await getAmountOut({amountIn, inTokenName}))
+        //setAmountOut(await getAmountOut({amountIn, inTokenName}))
+        setAmountOut(await getAmountOut({amountIn:sanitizedAmountIn, inTokenName}))
         setLastEdited(LAST_EDITED_VALS.IN)
     }
     const handleAmountOutChange = async (amountOut) => {
         if (Number.isNaN(Number(amountOut))) return  // if emtpy 
         
-        amountOut = sanitizeAmount(amountOut)
+        //amountOut = sanitizeAmount(amountOut)
+        const sanitizedAmountOut = sanitizeAmount(amountOut)
+
+        
         setAmountOut(amountOut)
         let inTokenName = IN_TOKEN_NAME[inTokenIdx]
-        setAmountIn(await getAmountIn({amountOut, inTokenName}))
+        //setAmountIn(await getAmountIn({amountOut, inTokenName}))
+        setAmountIn(await getAmountIn({amountOut: sanitizedAmountOut, inTokenName}))
         setLastEdited(LAST_EDITED_VALS.OUT)
     }
 
@@ -101,13 +107,13 @@ export default ({}) => {
             <Form id="swapbox-form-bitroot" onSubmit={e=>{e.preventDefault(); doSwap()}} >
                 <Container chubby>
                     <Label>{TOKEN_NAMES[inTokenIdx]} amount:
-                    <Input type="numeric"  bordered
+                    <Input type="text"  inputMode="decimal" bordered
                             value={amountIn} onChange={e=>handleAmountInChange(e.target.value)}></Input>
                     </Label>
                     <Balance name={getInTokenName()} amount={getInBalance()} />
                     <Downarrow onClick={handleDirectionChange} />
                     <Label >{TOKEN_NAMES[outTokenIdx()]} amount:
-                    <Input type="numeric" bordered
+                    <Input type="text" inputMode="decimal" bordered
                             value={amountOut} onChange={e=>handleAmountOutChange(e.target.value)}></Input>
                     </Label>
                     <Label><Input type="submit" bordered value="Swap"/></Label>
