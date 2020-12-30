@@ -5,7 +5,7 @@ import {getAmountOut, getAmountIn, swap} from "../flow/actions"
 import {useCurrentUser, usePrices, useBalances} from "../hooks"
 import {sanitizeAmount} from "../utils"
 import {Downarrow} from "../visual"
-import {Balance, Quantinfo}  from "../components/subcomponents"
+import {Balance, Quantinfo, NumericInput}  from "../components/subcomponents"
 import {Form, Label, Input, P, Container }  from "../components/styled"
 
 
@@ -16,7 +16,6 @@ const LAST_EDITED_VALS = {
     IN: "IN",
     OUT: "OUT"
 }
-
 
 export default ({}) => {
 
@@ -34,7 +33,7 @@ export default ({}) => {
 
     const handleAmountInChange = async (amountIn) => {
 //TODO: move the line below (at least) to a Numerical INput component
-        if (amountIn !== "." && Number.isNaN(Number(amountIn))) return  // if emtpy 
+        //if (amountIn !== "." && Number.isNaN(Number(amountIn))) return  // if emtpy 
         
         const sanitizedAmountIn = sanitizeAmount(amountIn)
 
@@ -103,9 +102,8 @@ export default ({}) => {
             </Container>
             <Form id="swapbox-form-bitroot" onSubmit={e=>{e.preventDefault(); doSwap()}} >
                 <Container chubby>
-                    <Label>{TOKEN_NAMES[inTokenIdx]} amount:
-                    <Input type="text"  inputMode="decimal" bordered
-                            value={amountIn} onChange={e=>handleAmountInChange(e.target.value)}></Input>
+                    <Label>{TOKEN_NAMES[inTokenIdx]} amount:    
+                        <NumericInput value={amountIn} handleChange={handleAmountInChange} />
                     </Label>
                     <Balance name={getInTokenName()} amount={getInBalance()} />
                     <Downarrow onClick={handleDirectionChange} />
