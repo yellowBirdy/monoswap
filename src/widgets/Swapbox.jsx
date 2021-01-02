@@ -31,24 +31,18 @@ export default ({}) => {
 
     const outTokenIdx = ()=>(inTokenIdx+1)%2
 
-    const handleAmountInChange = async (amountIn) => {
-//TODO: move the line below (at least) to a Numerical INput component
-        //if (amountIn !== "." && Number.isNaN(Number(amountIn))) return  // if emtpy 
-        
-        const sanitizedAmountIn = sanitizeAmount(amountIn)
-
+    const handleAmountInChange = async (amountIn) => {        
         setAmountIn(amountIn)
+
+        const sanitizedAmountIn = sanitizeAmount(amountIn)
         let inTokenName = IN_TOKEN_NAME[inTokenIdx]
-        //setAmountOut(await getAmountOut({amountIn, inTokenName}))
         setAmountOut(await getAmountOut({amountIn:sanitizedAmountIn, inTokenName}))
         setLastEdited(LAST_EDITED_VALS.IN)
     }
     const handleAmountOutChange = async (amountOut) => {
-        if (amountOut !== "." && Number.isNaN(Number(amountOut))) return  // if emtpy 
-        
-        const sanitizedAmountOut = sanitizeAmount(amountOut)
-        
         setAmountOut(amountOut)
+
+        const sanitizedAmountOut = sanitizeAmount(amountOut)
         let inTokenName = IN_TOKEN_NAME[inTokenIdx]
         setAmountIn(await getAmountIn({amountOut: sanitizedAmountOut, inTokenName}))
         setLastEdited(LAST_EDITED_VALS.OUT)
@@ -107,9 +101,9 @@ export default ({}) => {
                     </Label>
                     <Balance name={getInTokenName()} amount={getInBalance()} />
                     <Downarrow onClick={handleDirectionChange} />
-                    <Label >{TOKEN_NAMES[outTokenIdx()]} amount:
-                    <Input type="text" inputMode="decimal" bordered
-                            value={amountOut} onChange={e=>handleAmountOutChange(e.target.value)}></Input>
+                    <Label >{TOKEN_NAMES[outTokenIdx()]} amount: 
+                    <NumericInput value={amountOut} handleChange={handleAmountOutChange} />
+
                     </Label>
                     <Label><Input type="submit" bordered value="Swap"/></Label>
                     <Balance name={getOutTokenName()} amount={getOutBalance()} />

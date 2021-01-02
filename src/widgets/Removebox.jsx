@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from "react"
 
-import {Balance} from "../components/subcomponents"
+import {Balance, NumericInput} from "../components/subcomponents"
 import {TOKEN_NAMES, LP_TOKEN_NAME} from "../config"
 
 import {sanitizeAmount} from "../utils"
@@ -42,8 +42,7 @@ export default () => {
             <Form id="withdraw_liquiditybox-form" onSubmit={e=>{e.preventDefault(); doRemove()}} >
             <Container chubby>
                 <Label >{LP_TOKEN_NAME} amount:
-                <Input type="numeric"  bordered
-                        value={amount} onChange={e=>setAmount(sanitizeAmount(e.target.value))}></Input>
+                <NumericInput value={amount} handleChange={setAmount} />
                 </Label>
                 <Balance name={LP_TOKEN_NAME} amount={Number(balances[LP_TOKEN_NAME])} />
                 

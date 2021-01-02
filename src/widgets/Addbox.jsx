@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from "react"
 
-import {Balance} from "../components/subcomponents"
+import {Balance, NumericInput} from "../components/subcomponents"
 import {TOKEN_NAMES, LP_TOKEN_NAME} from "../config"
 
 import {sanitizeAmount} from "../utils"
@@ -28,18 +28,15 @@ export default () => {
     },[amount0, amount1])
 
     const handleAmount0Change = async (amount0) => {
-        if (Number.isNaN(Number(amount0))) return  // if emtpy 
-        
-        amount0 = sanitizeAmount(amount0)
-    
         setAmount0(amount0)
+    
+        amount0 = sanitizeAmount(amount0)
         setAmount1(sanitizeAmount(String((amount0 * prices[0]).toFixed(4))))  //cast to string so both are string, as UFix64 deprecates numerical input
     }
     const handleAmount1Change = async (amount1) => {
-        if (Number.isNaN(Number(amount1))) return  // if emtpy 
-        
-        amount1 = sanitizeAmount(amount1)
         setAmount1(amount1)
+
+        amount1 = sanitizeAmount(amount1)
         setAmount0(sanitizeAmount(String((amount1 * prices[1]).toFixed(4))))  //cast to string so both are string, as UFix64 deprecates numerical input
     }
 
@@ -57,15 +54,14 @@ export default () => {
             <Form id="liquiditybox-form-bitroot" onSubmit={e=>{e.preventDefault(); doAdd()}} >
                 <Container chubby>
                     <Label >{TOKEN_NAMES[0]} amount:
-                    <Input type="numeric"  bordered
-                            value={amount0} onChange={e=>handleAmount0Change(e.target.value)}></Input>
+                    
+                    <NumericInput value={amount0} handleChange={handleAmount0Change} />  
                     </Label>
                     <Balance name={TOKEN_NAMES[0]} amount={Number(balances[0])} />
                     <p style={{display:"inline-block", width:"100%", textAlign:"center"}}>AND</p>
-                    <label style={{display:"block", width: "90%", margin:"auto", textAlign:"center"}}>{TOKEN_NAMES[1]} amount:
-                    <Input type="numeric" bordered 
-                        value={amount1} onChange={e=>handleAmount1Change(e.target.value)}></Input>
-                    </label>
+                    <Label style={{display:"block", width: "90%", margin:"auto", textAlign:"center"}}>{TOKEN_NAMES[1]} amount:
+                    <NumericInput value={amount1} handleChange={handleAmount1Change} />  
+                    </Label>
                    <Balance name={TOKEN_NAMES[1]} amount={Number(balances[1])} />
 
                    <Label><Input type="submit" value="Add Liquidity" bordered /></Label>
