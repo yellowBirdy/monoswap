@@ -41,7 +41,7 @@ export default () => {
     }
 
     const doAdd = async () => {
-        await addLiquidity({amount0: sanitizeAmount(amount0), amount1: sanitizeAmount(1)})
+        await addLiquidity({amount0: sanitizeAmount(amount0), amount1: sanitizeAmount(amount1)})
     }
     const lpAmountOut = 13.51
     return   (
