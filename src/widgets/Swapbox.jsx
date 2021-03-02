@@ -71,7 +71,7 @@ export default ({}) => {
         //send swap transaction
         let inTokenName = getInTokenName() 
         let minAmountOut = String((amountIn*prices[inTokenIdx] * (1-maxSlippage)).toFixed(3))
-        swap({inTokenName, sanitizeAmount(amountIn), minAmountOut})
+        swap({inTokenName, amountIn: sanitizeAmount(amountIn), minAmountOut})
     }
 
     const handleDirectionChange = (e) => {
