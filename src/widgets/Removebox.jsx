@@ -28,7 +28,7 @@ export default () => {
     },[amount])
 
     const doRemove = async () => {
-        await removeLiquidity({amount})
+        await removeLiquidity({amount: sanitizeAmount(amount)})
     }
     const amount0Out = 13.51
     const amount1Out = 21.23
