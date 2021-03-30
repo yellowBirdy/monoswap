@@ -1,5 +1,9 @@
 # Monoswap - a POC of AMM DEX for FLOW blockchain
 
+# Deployed on the testnet 
+Address: 56b4abe67bcb092d
+[UI link](https://monoswap.herokuapp.com)
+
 ## Dependencies
 
 * `yarn install`
