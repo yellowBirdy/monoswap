@@ -2,7 +2,10 @@
 
 # Deployed on the testnet 
 Address: 56b4abe67bcb092d
-[UI link](https://monoswap.herokuapp.com)
+
+[UI link](https://monoswap.herokuapp.com) feel free to check it out, onboarding is seemles:
+you will be using an integrated wallet provided by blockto - so there is no need to install
+browser extensions, the wallet subidises gas and the SWAP app will mint a small amount of Bitroot token into your wallet, so no need to visit any faucets.
 
 ## Dependencies
 
